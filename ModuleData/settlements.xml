@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settlements>
+  <!--
+    Kingdom Capitals Building Extensions
+    Extends all major buildings in capital cities to level 5.
+
+    Progression Pattern:
+    - Levels 4 and 5 follow the same progression as levels 1-3
+    - Example: If levels are 0%, 10%, 15%, then 4=20%, 5=25%
+    - Construction cost and time increase proportionally
+
+    Capital Cities:
+    - Battania: Marunath (town_b2)
+    - Vlandia: Galend (town_v1)
+    - Aserai: Quyaz (town_a8)
+    - Sturgia: Balgard (town_s2)
+    - Khuzait: Makeb (town_k4)
+    - Western Empire: Jalmarys (town_es3)
+    - Northern Empire: Diathma (town_en2)
+    - Southern Empire: Lycaron (town_es2)
+  -->
+
+  <!-- BATTANIA CAPITAL: Marunath (town_b2) -->
+  <Settlement id="town_b2">
+    <Buildings>
+      <!-- Granary Extension -->
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+
+      <!-- Forum Extension (Prosperity bonus) -->
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+
+      <!-- Marketplace Extension (Tax income) -->
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+
+      <!-- Garrison Barracks Extension (Garrison capacity) -->
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+
+      <!-- Training Fields Extension (XP bonus) -->
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+
+      <!-- Siege Workshop Extension (Production) -->
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+
+      <!-- Fairgrounds Extension (Food variety) -->
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+
+  <!-- VLANDIA CAPITAL: Galend (town_v1) -->
+  <Settlement id="town_v1">
+    <Buildings>
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+
+  <!-- ASERAI CAPITAL: Quyaz (town_a8) -->
+  <Settlement id="town_a8">
+    <Buildings>
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+
+  <!-- STURGIA CAPITAL: Balgard (town_s2) -->
+  <Settlement id="town_s2">
+    <Buildings>
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+
+  <!-- KHUZAIT CAPITAL: Makeb (town_k4) -->
+  <Settlement id="town_k4">
+    <Buildings>
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+
+  <!-- WESTERN EMPIRE CAPITAL: Jalmarys (town_es3) -->
+  <Settlement id="town_es3">
+    <Buildings>
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+
+  <!-- NORTHERN EMPIRE CAPITAL: Diathma (town_en2) -->
+  <Settlement id="town_en2">
+    <Buildings>
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+
+  <!-- SOUTHERN EMPIRE CAPITAL: Lycaron (town_es2) -->
+  <Settlement id="town_es2">
+    <Buildings>
+      <Building id="building_settlement_granary">
+        <BuildingType id="building_settlement_granary" level="4" />
+        <BuildingType id="building_settlement_granary" level="5" />
+      </Building>
+      <Building id="building_settlement_forum">
+        <BuildingType id="building_settlement_forum" level="4" />
+        <BuildingType id="building_settlement_forum" level="5" />
+      </Building>
+      <Building id="building_settlement_marketplace">
+        <BuildingType id="building_settlement_marketplace" level="4" />
+        <BuildingType id="building_settlement_marketplace" level="5" />
+      </Building>
+      <Building id="building_settlement_garrison_barracks">
+        <BuildingType id="building_settlement_garrison_barracks" level="4" />
+        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+      </Building>
+      <Building id="building_settlement_training_fields">
+        <BuildingType id="building_settlement_training_fields" level="4" />
+        <BuildingType id="building_settlement_training_fields" level="5" />
+      </Building>
+      <Building id="building_settlement_siege_workshop">
+        <BuildingType id="building_settlement_siege_workshop" level="4" />
+        <BuildingType id="building_settlement_siege_workshop" level="5" />
+      </Building>
+      <Building id="building_settlement_fairgrounds">
+        <BuildingType id="building_settlement_fairgrounds" level="4" />
+        <BuildingType id="building_settlement_fairgrounds" level="5" />
+      </Building>
+    </Buildings>
+  </Settlement>
+</Settlements>

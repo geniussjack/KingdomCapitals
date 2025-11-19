@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="English" />
+  </tags>
+  <strings>
+    <!-- Mod Information -->
+    <string id="kc_mod_name" text="Kingdom Capitals" />
+    <string id="kc_mod_description" text="Adds strategic importance to capital cities with unique mechanics and conquest features." />
+
+    <!-- Capital Names (for UI display) -->
+    <string id="kc_capital_marunath" text="Marunath (Capital of Battania)" />
+    <string id="kc_capital_galend" text="Galend (Capital of Vlandia)" />
+    <string id="kc_capital_quyaz" text="Quyaz (Capital of Aserai)" />
+    <string id="kc_capital_balgard" text="Balgard (Capital of Sturgia)" />
+    <string id="kc_capital_makeb" text="Makeb (Capital of Khuzait)" />
+    <string id="kc_capital_jalmarys" text="Jalmarys (Capital of Western Empire)" />
+    <string id="kc_capital_diathma" text="Diathma (Capital of Northern Empire)" />
+    <string id="kc_capital_lycaron" text="Lycaron (Capital of Southern Empire)" />
+
+    <!-- Conquest Messages -->
+    <string id="kc_capital_conquered" text="{CAPITAL_NAME} has fallen! {KINGDOM_NAME} is no more!" />
+    <string id="kc_player_conquered_capital" text="You have conquered {KINGDOM_NAME} by capturing their capital!" />
+    <string id="kc_capital_captured_no_kingdom" text="You have captured {CAPITAL_NAME}! Found your own kingdom to complete the conquest." />
+    <string id="kc_kingdom_destroyed" text="The {KINGDOM_NAME} has been completely destroyed!" />
+
+    <!-- Garrison Messages -->
+    <string id="kc_garrison_reinforced" text="{CAPITAL_NAME} garrison reinforced with {TROOP_COUNT} {TROOP_TYPE}" />
+    <string id="kc_garrison_no_food" text="{CAPITAL_NAME} has no food - garrison reinforcement skipped" />
+
+    <!-- Transfer Messages -->
+    <string id="kc_capital_transferred" text="{CAPITAL_NAME} transferred to {NEW_OWNER}" />
+    <string id="kc_capital_status_removed" text="{SETTLEMENT_NAME} is no longer a capital" />
+
+    <!-- Building Descriptions -->
+    <string id="kc_building_level_4_desc" text="Capital-exclusive Level 4: Enhanced benefits for the kingdom's heart" />
+    <string id="kc_building_level_5_desc" text="Capital-exclusive Level 5: Maximum development for a true capital city" />
+
+    <!-- Notifications -->
+    <string id="kc_ruler_died" text="The ruler of {KINGDOM_NAME} has died. Capital ownership will be transferred." />
+    <string id="kc_clan_vassalized" text="Clan {CLAN_NAME} has become a vassal of {KINGDOM_NAME}" />
+
+    <!-- Errors -->
+    <string id="kc_error_capital_not_found" text="Error: Capital not found for kingdom {KINGDOM_NAME}" />
+    <string id="kc_error_transfer_failed" text="Error: Failed to transfer capital {CAPITAL_NAME}" />
+    <string id="kc_error_conquest_failed" text="Error: Capital conquest mechanics failed for {CAPITAL_NAME}" />
+
+    <!-- MCM Settings Descriptions (backup if MCM doesn't load) -->
+    <string id="kc_settings_daily_reinforcement" text="Daily Garrison Reinforcement" />
+    <string id="kc_settings_food_consumption" text="Garrison Food Consumption Multiplier" />
+    <string id="kc_settings_prosperity_tier" text="Prosperity Per Troop Tier" />
+    <string id="kc_settings_enable_conquest" text="Enable Capital Conquest Mechanics" />
+    <string id="kc_settings_transfer_ruling_clan" text="Transfer Capital to Ruling Clan" />
+    <string id="kc_settings_vassalize_clans" text="Vassalize Defeated Kingdom Clans" />
+    <string id="kc_settings_golden_names" text="Show Golden Capital Names" />
+    <string id="kc_settings_notifications" text="Enable Capital Conquest Notifications" />
+    <string id="kc_settings_debug_logging" text="Enable Debug Logging" />
+    <string id="kc_settings_allow_buildings" text="Allow Capital Level 4-5 Buildings" />
+  </strings>
+</base>
