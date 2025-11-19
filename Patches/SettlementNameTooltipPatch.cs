@@ -12,6 +12,8 @@ namespace KingdomCapitals.Patches
     /// Harmony patch to display capital settlement names with golden color markup.
     /// Patches Settlement.Name property getter to add HTML color tags to capital names.
     /// Uses Bannerlord's built-in color tag support for visual distinction.
+    /// NOTE: Currently disabled as TextObject does not support HTML color tags.
+    /// Color formatting in Bannerlord is handled at the UI/Widget level, not in TextObject.
     /// </summary>
     [HarmonyPatch]
     public static class SettlementNameColorPatch
@@ -23,6 +25,17 @@ namespace KingdomCapitals.Patches
         static System.Reflection.MethodBase TargetMethod()
         {
             return AccessTools.PropertyGetter(typeof(Settlement), "Name");
+        }
+
+        /// <summary>
+        /// Determines if the patch should be applied.
+        /// </summary>
+        static bool Prepare()
+        {
+            // DISABLED: TextObject does not support HTML color tags
+            // Color formatting must be done at UI/Widget level
+            ModLogger.Log("SettlementNameColorPatch DISABLED: TextObject does not support HTML markup");
+            return false;
         }
 
         /// <summary>

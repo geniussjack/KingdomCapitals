@@ -20,7 +20,7 @@ namespace KingdomCapitals.Utils
             { "vlandia", "town_V5" },       // Galend
             { "aserai", "town_A1" },        // Quyaz
             { "sturgia", "town_S2" },       // Balgard
-            { "khuzait", "town_K4" },       // Ortongard
+            { "khuzait", "town_K3" },       // Makeb
             { "empire_w", "town_EW3" },     // Jalmarys (Western Empire)
             { "empire", "town_EN2" },       // Diathma (Northern Empire)
             { "empire_s", "town_ES4" }      // Lycaron (Southern Empire)
