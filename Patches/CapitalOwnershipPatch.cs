@@ -13,7 +13,7 @@ namespace KingdomCapitals.Patches
     /// Harmony patch to prevent voting on captured capital settlements.
     /// Ensures capitals are transferred directly to the ruling clan without democratic decision.
     /// </summary>
-    [HarmonyPatch(typeof(Kingdom), "AddDecision")]
+    [HarmonyPatch(typeof(Kingdom), "AddDecision", new Type[] { typeof(KingdomDecision), typeof(bool) })]
     public static class Kingdom_AddDecision_Patch
     {
         /// <summary>
