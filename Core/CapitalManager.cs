@@ -6,6 +6,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using KingdomCapitals.Utils;
+using KingdomCapitals.Patches;
 
 namespace KingdomCapitals.Core
 {
@@ -43,6 +44,10 @@ namespace KingdomCapitals.Core
             }
 
             _isInitialized = true;
+
+            // Clear the settlement name cache to ensure fresh color markup
+            SettlementNameColorPatch.ClearCache();
+
             ModLogger.Log($"CapitalManager initialized with {_activeCapitals.Count} capitals");
         }
 
