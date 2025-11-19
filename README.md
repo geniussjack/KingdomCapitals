@@ -256,11 +256,29 @@ This mod is provided as-is for personal use. Modification and redistribution are
 - MCM integration for full customization
 - Harmony patches for voting prevention and UI modification
 
+## Documentation
+
+Comprehensive technical documentation is available in YAML format:
+
+📚 **[Technical Documentation](Documentation/project-documentation.yaml)**
+
+The documentation includes:
+- **API Reference**: Complete API documentation for all classes and methods
+- **Architecture Details**: In-depth architecture and design patterns
+- **Constants Reference**: All configurable constants and their values
+- **Configuration Guide**: MCM settings and build configuration
+- **Event Lifecycle**: Campaign events and Harmony patches
+- **Game Mechanics**: Detailed mechanics formulas and sequences
+- **Troubleshooting**: Common issues and solutions
+- **Development Guidelines**: Coding standards and git workflow
+- **Performance Metrics**: Optimization details and benchmarks
+
 ## Support
 
 For bug reports, suggestions, or questions:
 - **GitHub Issues**: [Create an issue](https://github.com/yourusername/KingdomCapitals/issues)
 - **Nexus Mods**: [Mod page](https://www.nexusmods.com/mountandblade2bannerlord/mods/XXXXX)
+- **Documentation**: [Technical Docs](Documentation/project-documentation.yaml)
 
 ---
 
