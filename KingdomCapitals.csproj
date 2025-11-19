@@ -142,16 +142,23 @@
 
   <!-- Clean unnecessary files -->
   <Target Name="CleanOutputFiles" AfterTargets="Build">
+    <!-- Always delete these files -->
     <ItemGroup>
       <FilesToDelete Include="$(OutputPath)*.deps.json" />
       <FilesToDelete Include="$(OutputPath)*.runtimeconfig.json" />
-      <FilesToDelete Include="$(OutputPath)*.pdb" Condition="'$(Configuration)'=='Release'" />
       <FilesToDelete Include="$(OutputPath)MCMv5.dll" />
       <FilesToDelete Include="$(OutputPath)0Harmony.dll" />
       <FilesToDelete Include="$(OutputPath)TaleWorlds.*.dll" />
       <FilesToDelete Include="$(OutputPath)SandBox*.dll" />
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
+
+    <!-- Delete .pdb only in Release -->
+    <ItemGroup Condition="'$(Configuration)'=='Release'">
+      <PdbFilesToDelete Include="$(OutputPath)*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(PdbFilesToDelete)" Condition="'$(Configuration)'=='Release'" />
+
     <Message Text="Cleaned unnecessary files from output (game DLLs should come from game installation)" Importance="high" />
   </Target>
 </Project>
