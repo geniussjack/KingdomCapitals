@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
@@ -23,11 +24,87 @@ namespace KingdomCapitals.Patches
         /// <returns>MethodBase of the AddDecision method.</returns>
         static System.Reflection.MethodBase TargetMethod()
         {
-            return AccessTools.Method(
-                typeof(Kingdom),
-                "AddDecision",
-                new Type[] { typeof(KingdomDecision), typeof(bool) }
-            );
+            try
+            {
+                var method = AccessTools.Method(
+                    typeof(Kingdom),
+                    "AddDecision",
+                    new Type[] { typeof(KingdomDecision), typeof(bool) }
+                );
+
+                if (method == null)
+                {
+                    ModLogger.Error("Failed to find Kingdom.AddDecision method", null);
+                }
+                else
+                {
+                    ModLogger.Log("Successfully found Kingdom.AddDecision method for patching");
+                }
+
+                return method;
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error("Exception in Kingdom_AddDecision_Patch.TargetMethod", ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Determines if the patch should be applied.
+        /// </summary>
+        static bool Prepare()
+        {
+            try
+            {
+                // Log all methods in Kingdom class that contain "Decision"
+                var allMethods = typeof(Kingdom).GetMethods(
+                    System.Reflection.BindingFlags.Public |
+                    System.Reflection.BindingFlags.NonPublic |
+                    System.Reflection.BindingFlags.Instance |
+                    System.Reflection.BindingFlags.Static
+                );
+
+                ModLogger.Log("Searching for AddDecision method in Kingdom class...");
+                foreach (var m in allMethods)
+                {
+                    if (m.Name.Contains("Decision"))
+                    {
+                        var parameters = m.GetParameters();
+                        var paramStr = string.Join(", ", parameters.Select(p => $"{p.ParameterType.Name} {p.Name}"));
+                        ModLogger.Log($"Found method: {m.Name}({paramStr})");
+                    }
+                }
+
+                // Try to find the specific method
+                var method = AccessTools.Method(
+                    typeof(Kingdom),
+                    "AddDecision",
+                    new Type[] { typeof(KingdomDecision), typeof(bool) }
+                );
+
+                if (method == null)
+                {
+                    // Try without the bool parameter
+                    method = AccessTools.Method(typeof(Kingdom), "AddDecision", new Type[] { typeof(KingdomDecision) });
+                    if (method != null)
+                    {
+                        ModLogger.Log("Found AddDecision with single parameter only");
+                    }
+                }
+
+                bool canPatch = method != null;
+                ModLogger.Log($"Kingdom_AddDecision_Patch.Prepare: {(canPatch ? "Ready to patch" : "Cannot patch - method not found")}");
+
+                // TEMPORARILY DISABLE THIS PATCH TO TEST OTHER PATCHES
+                ModLogger.Log("TEMPORARILY DISABLED Kingdom_AddDecision_Patch to test other patches");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error("Exception in Kingdom_AddDecision_Patch.Prepare", ex);
+                return false;
+            }
         }
 
         /// <summary>
@@ -95,6 +172,16 @@ namespace KingdomCapitals.Patches
         }
 
         /// <summary>
+        /// Determines if the patch should be applied.
+        /// </summary>
+        static bool Prepare()
+        {
+            // TEMPORARILY DISABLE THIS PATCH TO TEST OTHER PATCHES
+            ModLogger.Log("TEMPORARILY DISABLED SettlementClaimantDecision_Constructor_Patch to test other patches");
+            return false;
+        }
+
+        /// <summary>
         /// Prefix patch to prevent construction of settlement claimant decisions for capitals.
         /// </summary>
         /// <param name="proposerClan">The clan proposing the settlement claim.</param>
@@ -137,6 +224,16 @@ namespace KingdomCapitals.Patches
         static System.Reflection.MethodBase TargetMethod()
         {
             return AccessTools.Method(typeof(SettlementClaimantDecision), "DetermineSupport");
+        }
+
+        /// <summary>
+        /// Determines if the patch should be applied.
+        /// </summary>
+        static bool Prepare()
+        {
+            // TEMPORARILY DISABLE THIS PATCH TO TEST OTHER PATCHES
+            ModLogger.Log("TEMPORARILY DISABLED SettlementClaimantDecision_DetermineSupport_Patch to test other patches");
+            return false;
         }
 
         /// <summary>
