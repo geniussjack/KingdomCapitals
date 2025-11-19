@@ -72,21 +72,14 @@ namespace KingdomCapitals.Patches
                 string originalName = __result.ToString();
 
                 // Skip if name is empty or already contains crown icon
-                if (string.IsNullOrEmpty(originalName) || originalName.Contains("<img"))
+                if (string.IsNullOrEmpty(originalName) || originalName.Contains("👑"))
                     return;
 
-                // Try different crown icon paths - one of these should work!
-                // Format: {=!}<img src="path" extend="size">
-                string crownIcon = "{=!}<img src=\"General\\\\Icons\\\\Crown@2x\" extend=\"8\">";
-
-                // Alternative paths to try if first doesn't work:
-                // crownIcon = "{=!}<img src=\"SPGeneral\\\\Icons\\\\Crown@2x\" extend=\"8\">";
-                // crownIcon = "{=!}<img src=\"StdAssets\\\\crown\" extend=\"8\">";
-                // crownIcon = "{=!}<img src=\"General\\\\Icons\\\\Influence@2x\" extend=\"8\">"; // Influence icon as fallback
-                // crownIcon = "👑 "; // Unicode crown as last resort
+                // Use Unicode crown emoji - simple and guaranteed to work!
+                string crownIcon = "👑 ";
 
                 // Create new TextObject with crown icon prefix
-                string crownedName = $"{crownIcon} {originalName}";
+                string crownedName = $"{crownIcon}{originalName}";
                 TextObject crownedTextObject = new TextObject(crownedName);
 
                 // Cache the modified name
