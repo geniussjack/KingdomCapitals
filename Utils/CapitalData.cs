@@ -12,18 +12,18 @@ namespace KingdomCapitals.Utils
     {
         /// <summary>
         /// Mapping of kingdom StringId to capital settlement StringId.
-        /// Based on Bannerlord v1.2.12 default capitals.
+        /// Based on Bannerlord v1.2.12+ default capitals.
         /// </summary>
         private static readonly Dictionary<string, string> KingdomCapitalMap = new Dictionary<string, string>
         {
-            { "battania", "town_b2" },      // Marunath
-            { "vlandia", "town_v1" },       // Galend
-            { "aserai", "town_a8" },        // Quyaz
-            { "sturgia", "town_s2" },       // Balgard
-            { "khuzait", "town_k4" },       // Makeb
-            { "empire_w", "town_es3" },     // Jalmarys (Western Empire)
-            { "empire", "town_en2" },       // Diathma (Northern Empire)
-            { "empire_s", "town_es2" }      // Lycaron (Southern Empire)
+            { "battania", "town_B1" },      // Marunath
+            { "vlandia", "town_V5" },       // Galend
+            { "aserai", "town_A1" },        // Quyaz
+            { "sturgia", "town_S2" },       // Balgard
+            { "khuzait", "town_K4" },       // Ortongard
+            { "empire_w", "town_EW3" },     // Jalmarys (Western Empire)
+            { "empire", "town_EN2" },       // Diathma (Northern Empire)
+            { "empire_s", "town_ES4" }      // Lycaron (Southern Empire)
         };
 
         /// <summary>

@@ -34,11 +34,6 @@ namespace KingdomCapitals.Patches
             = new System.Collections.Generic.Dictionary<string, TextObject>();
 
         /// <summary>
-        /// Counter for diagnostic logging (limit log spam)
-        /// </summary>
-        private static int _loggedSettlements = 0;
-
-        /// <summary>
         /// Postfix patch for Settlement.Name getter.
         /// Adds golden color markup to capital settlement names.
         /// </summary>
@@ -53,16 +48,7 @@ namespace KingdomCapitals.Patches
                     return;
 
                 // Check if this settlement is a capital
-                bool isCapital = CapitalManager.IsCapital(__instance);
-
-                // DIAGNOSTIC: Log first few checks (using __result to avoid recursion!)
-                if (_loggedSettlements < 5)
-                {
-                    ModLogger.Log($"SettlementNamePatch check: {__result.ToString()} (StringId: {__instance.StringId}) - IsCapital: {isCapital}");
-                    _loggedSettlements++;
-                }
-
-                if (!isCapital)
+                if (!CapitalManager.IsCapital(__instance))
                     return;
 
                 // Check cache first to avoid redundant modifications
@@ -106,7 +92,6 @@ namespace KingdomCapitals.Patches
         public static void ClearCache()
         {
             _capitalNameCache.Clear();
-            _loggedSettlements = 0; // Reset diagnostic counter
             ModLogger.Log(Messages.Log.CapitalNameCacheCleared);
         }
     }
