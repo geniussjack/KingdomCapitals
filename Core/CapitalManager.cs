@@ -35,6 +35,13 @@ namespace KingdomCapitals.Core
             _activeCapitals = new Dictionary<string, Settlement>();
             _recentlyCapturedCapitals = new HashSet<Settlement>();
 
+            // Log all kingdoms for debugging
+            ModLogger.Log($"Found {Kingdom.All.Count()} kingdoms in game:");
+            foreach (Kingdom kingdom in Kingdom.All)
+            {
+                ModLogger.Log($"  Kingdom: {kingdom.Name} (StringId: '{kingdom.StringId}')");
+            }
+
             // Register all default capitals
             foreach (Kingdom kingdom in Kingdom.All)
             {
@@ -42,6 +49,11 @@ namespace KingdomCapitals.Core
                 if (capital != null)
                 {
                     _activeCapitals[kingdom.StringId] = capital;
+                    ModLogger.Log($"Registered capital: {capital.Name} for kingdom {kingdom.Name}");
+                }
+                else
+                {
+                    ModLogger.Log($"No capital found for kingdom: {kingdom.Name} (StringId: '{kingdom.StringId}')");
                 }
             }
 

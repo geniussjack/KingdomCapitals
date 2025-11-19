@@ -9,9 +9,9 @@ namespace KingdomCapitals.Constants
     {
         /// <summary>
         /// Golden color hex code for capital settlement names.
-        /// RGB: 203, 174, 121
+        /// RGB: 205, 175, 134
         /// </summary>
-        public const string CapitalGoldenColorHex = "#cbae79";
+        public const string CapitalGoldenColorHex = "#cdaf86";
 
         /// <summary>
         /// Color tag format for Bannerlord UI system.
