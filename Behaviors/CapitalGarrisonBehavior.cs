@@ -9,6 +9,7 @@ using TaleWorlds.Library;
 using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
 using KingdomCapitals.Models;
+using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Behaviors
 {
@@ -21,11 +22,18 @@ namespace KingdomCapitals.Behaviors
         // Get settings from MCM
         private ModSettings Settings => ModSettings.Instance;
 
+        /// <summary>
+        /// Registers event listeners for daily settlement ticks.
+        /// </summary>
         public override void RegisterEvents()
         {
             CampaignEvents.DailyTickSettlementEvent.AddNonSerializedListener(this, OnDailyTickSettlement);
         }
 
+        /// <summary>
+        /// Synchronizes behavior data with save games.
+        /// </summary>
+        /// <param name="dataStore">The data store for serialization.</param>
         public override void SyncData(IDataStore dataStore)
         {
             // No data to sync
@@ -34,6 +42,7 @@ namespace KingdomCapitals.Behaviors
         /// <summary>
         /// Called daily for each settlement. Adds troops to capital garrisons.
         /// </summary>
+        /// <param name="settlement">The settlement being processed.</param>
         private void OnDailyTickSettlement(Settlement settlement)
         {
             try
@@ -45,7 +54,7 @@ namespace KingdomCapitals.Behaviors
                 // Check if settlement has food available
                 if (settlement.Town.FoodStocks <= 0)
                 {
-                    ModLogger.Log($"Capital {settlement.Name} has no food, skipping garrison reinforcement");
+                    ModLogger.Log(string.Format(Messages.Log.CapitalNoFood, settlement.Name));
                     return;
                 }
 
@@ -63,7 +72,9 @@ namespace KingdomCapitals.Behaviors
 
         /// <summary>
         /// Adds daily garrison reinforcement based on prosperity.
+        /// Higher prosperity results in higher tier troops being recruited.
         /// </summary>
+        /// <param name="settlement">The capital settlement to reinforce.</param>
         private void AddDailyGarrisonReinforcement(Settlement settlement)
         {
             try
@@ -79,7 +90,7 @@ namespace KingdomCapitals.Behaviors
 
                 if (troopType == null)
                 {
-                    ModLogger.Warning($"Could not find troop type for {settlement.Name} (tier {troopTier})");
+                    ModLogger.Warning(string.Format(Messages.Warnings.CouldNotFindTroopType, settlement.Name, troopTier));
                     return;
                 }
 
@@ -99,17 +110,22 @@ namespace KingdomCapitals.Behaviors
         /// Calculates troop tier based on settlement prosperity.
         /// Every X prosperity = +1 tier (max tier 6), where X is configured in MCM.
         /// </summary>
+        /// <param name="prosperity">The settlement's prosperity value.</param>
+        /// <returns>The calculated troop tier (0-6).</returns>
         private int CalculateTroopTier(float prosperity)
         {
             int prosperityPerTier = Settings?.ProsperityPerTroopTier ?? 2500;
             int tier = (int)(prosperity / prosperityPerTier);
-            return (int)MathF.Clamp(tier, 0, 6); // Bannerlord max tier is 6
+            return (int)MathF.Clamp(tier, GameplayConstants.MinTroopTier, GameplayConstants.MaxTroopTier);
         }
 
         /// <summary>
         /// Gets the appropriate troop type for a culture and tier.
         /// Handles troop tree branching by selecting randomly.
         /// </summary>
+        /// <param name="culture">The culture of the settlement's owner.</param>
+        /// <param name="targetTier">The desired troop tier.</param>
+        /// <returns>A character object representing the troop type, or null if not found.</returns>
         private CharacterObject GetTroopForFactionAndTier(CultureObject culture, int targetTier)
         {
             try
@@ -122,7 +138,7 @@ namespace KingdomCapitals.Behaviors
                 CharacterObject currentTroop = basicTroop;
 
                 // Upgrade to target tier
-                for (int currentTier = 0; currentTier < targetTier; currentTier++)
+                for (int currentTier = GameplayConstants.MinTroopTier; currentTier < targetTier; currentTier++)
                 {
                     var upgrades = currentTroop.UpgradeTargets;
 
@@ -146,6 +162,7 @@ namespace KingdomCapitals.Behaviors
         /// Reduces food consumption for capital garrisons.
         /// This is applied daily to counteract the increased garrison size.
         /// </summary>
+        /// <param name="settlement">The capital settlement whose garrison food consumption to reduce.</param>
         private void ReduceCapitalGarrisonFoodConsumption(Settlement settlement)
         {
             try
@@ -157,7 +174,7 @@ namespace KingdomCapitals.Behaviors
 
                 // Calculate food consumption reduction
                 // Base consumption is approximately 1 food per party member per day
-                float normalConsumption = settlement.Town.GarrisonParty.Party.NumberOfAllMembers * 1.0f;
+                float normalConsumption = settlement.Town.GarrisonParty.Party.NumberOfAllMembers * GameplayConstants.BaseFoodConsumptionPerMember;
                 float reducedConsumption = normalConsumption * consumptionMultiplier;
                 float foodSavings = normalConsumption - reducedConsumption;
 

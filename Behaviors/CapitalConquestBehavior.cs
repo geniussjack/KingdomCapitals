@@ -7,6 +7,8 @@ using TaleWorlds.Library;
 using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
 using KingdomCapitals.Models;
+using KingdomCapitals.Constants;
+using KingdomCapitals.Services;
 
 namespace KingdomCapitals.Behaviors
 {
@@ -18,11 +20,18 @@ namespace KingdomCapitals.Behaviors
     {
         private ModSettings Settings => ModSettings.Instance;
 
+        /// <summary>
+        /// Registers event listeners for settlement ownership changes.
+        /// </summary>
         public override void RegisterEvents()
         {
             CampaignEvents.OnSettlementOwnerChangedEvent.AddNonSerializedListener(this, OnSettlementOwnerChanged);
         }
 
+        /// <summary>
+        /// Synchronizes behavior data with save games.
+        /// </summary>
+        /// <param name="dataStore">The data store for serialization.</param>
         public override void SyncData(IDataStore dataStore)
         {
             // No data to sync
@@ -30,7 +39,14 @@ namespace KingdomCapitals.Behaviors
 
         /// <summary>
         /// Called when a settlement changes ownership (conquest or transfer).
+        /// Triggers capital conquest mechanics if a capital city is captured.
         /// </summary>
+        /// <param name="settlement">The settlement that changed ownership.</param>
+        /// <param name="openToClaim">Whether the settlement is open to claim.</param>
+        /// <param name="newOwner">The new owner of the settlement.</param>
+        /// <param name="oldOwner">The previous owner of the settlement.</param>
+        /// <param name="capturerHero">The hero who captured the settlement.</param>
+        /// <param name="detail">Details about how ownership changed.</param>
         private void OnSettlementOwnerChanged(Settlement settlement, bool openToClaim, Hero newOwner, Hero oldOwner, Hero capturerHero, ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail detail)
         {
             try
@@ -50,7 +66,7 @@ namespace KingdomCapitals.Behaviors
 
                 if (oldKingdom == null)
                 {
-                    ModLogger.Warning($"Capital {settlement.Name} conquered but old kingdom is null");
+                    ModLogger.Warning(string.Format(Messages.Warnings.CapitalConqueredOldKingdomNull, settlement.Name));
                     return;
                 }
 
@@ -76,19 +92,19 @@ namespace KingdomCapitals.Behaviors
 
         /// <summary>
         /// Handles capital conquest when player has no kingdom.
-        /// Creates a new kingdom for the player.
+        /// Notifies the player to found a kingdom to complete the conquest.
         /// </summary>
+        /// <param name="capital">The capital settlement that was captured.</param>
+        /// <param name="defeatedKingdom">The kingdom that was defeated.</param>
+        /// <param name="playerHero">The player hero who captured the capital.</param>
         private void HandlePlayerConquestWithoutKingdom(Settlement capital, Kingdom defeatedKingdom, Hero playerHero)
         {
             try
             {
-                ModLogger.Log($"Player {playerHero.Name} captured capital {capital.Name} without a kingdom");
+                ModLogger.Log(string.Format(Messages.Log.PlayerCapturedCapitalWithoutKingdomLog, playerHero.Name, capital.Name));
 
                 // Notify player to found kingdom
-                InformationManager.DisplayMessage(new InformationMessage(
-                    $"You have captured {capital.Name}, the capital of {defeatedKingdom.Name}! Found your own kingdom to complete the conquest.",
-                    Colors.Green
-                ));
+                ConquestNotificationService.NotifyPlayerCapitalWithoutKingdom(capital, defeatedKingdom, playerHero);
 
                 // The player must manually found a kingdom
                 // When they do, the capital will automatically be recognized
@@ -102,8 +118,12 @@ namespace KingdomCapitals.Behaviors
 
         /// <summary>
         /// Handles capital conquest between kingdoms.
-        /// Executes the complete conquest sequence.
+        /// Executes the complete conquest sequence including settlement transfers and kingdom destruction.
         /// </summary>
+        /// <param name="capital">The capital settlement that was captured.</param>
+        /// <param name="defeatedKingdom">The kingdom that lost its capital.</param>
+        /// <param name="conquererKingdom">The kingdom that captured the capital.</param>
+        /// <param name="capturerHero">The hero who captured the capital.</param>
         private void HandleKingdomConquest(Settlement capital, Kingdom defeatedKingdom, Kingdom conquererKingdom, Hero capturerHero)
         {
             try
@@ -111,7 +131,7 @@ namespace KingdomCapitals.Behaviors
                 // Check if capital conquest is enabled
                 if (Settings?.EnableCapitalConquest == false)
                 {
-                    ModLogger.Log($"Capital conquest disabled in settings, treating {capital.Name} as normal settlement");
+                    ModLogger.Log(string.Format(Messages.Log.CapitalConquestDisabled, capital.Name));
                     return;
                 }
 
@@ -121,153 +141,33 @@ namespace KingdomCapitals.Behaviors
                 // 2. Transfer capital to ruling clan WITHOUT voting (if enabled)
                 if (Settings?.TransferCapitalToRulingClan != false)
                 {
-                    TransferCapitalToRulingClan(capital, conquererKingdom);
+                    SettlementTransferService.TransferCapitalToRulingClan(capital, conquererKingdom);
                 }
 
                 // 3. Transfer all other settlements of defeated kingdom
-                TransferAllSettlements(defeatedKingdom, conquererKingdom);
+                SettlementTransferService.TransferAllSettlements(defeatedKingdom, conquererKingdom);
 
                 // 4. Vassalize all clans of defeated kingdom (if enabled)
                 if (Settings?.VassalizeDefeatedClans != false)
                 {
-                    VassalizeClans(defeatedKingdom, conquererKingdom);
+                    KingdomService.VassalizeDefeatedClans(defeatedKingdom, conquererKingdom);
                 }
 
                 // 5. Remove capital status from conquered settlement
                 CapitalManager.UnregisterCapital(capital, defeatedKingdom);
 
                 // 6. Destroy the defeated kingdom
-                DestroyKingdom(defeatedKingdom);
+                KingdomService.DestroyKingdom(defeatedKingdom);
 
                 // 7. Notify player (if enabled)
                 if (Settings?.EnableConquestNotifications != false)
                 {
-                    NotifyKingdomConquest(capital, defeatedKingdom, conquererKingdom, capturerHero);
+                    ConquestNotificationService.NotifyKingdomConquest(capital, defeatedKingdom, conquererKingdom, capturerHero);
                 }
             }
             catch (Exception ex)
             {
                 ModLogger.Error($"Error handling kingdom conquest for {capital.Name}", ex);
-            }
-        }
-
-        /// <summary>
-        /// Transfers the captured capital directly to the ruling clan without voting.
-        /// </summary>
-        private void TransferCapitalToRulingClan(Settlement capital, Kingdom conquererKingdom)
-        {
-            try
-            {
-                if (conquererKingdom?.RulingClan == null)
-                {
-                    ModLogger.Error($"Cannot transfer capital {capital.Name}: ruling clan is null");
-                    return;
-                }
-
-                Hero rulingClanLeader = conquererKingdom.RulingClan.Leader;
-
-                // Force transfer to ruling clan
-                ChangeOwnerOfSettlementAction.ApplyByDefault(rulingClanLeader, capital);
-
-                ModLogger.Log($"Capital {capital.Name} transferred to ruling clan {conquererKingdom.RulingClan.Name}");
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"Error transferring capital {capital.Name} to ruling clan", ex);
-            }
-        }
-
-        /// <summary>
-        /// Transfers all settlements of the defeated kingdom to the conquerer.
-        /// </summary>
-        private void TransferAllSettlements(Kingdom defeatedKingdom, Kingdom conquererKingdom)
-        {
-            try
-            {
-                var settlementsToTransfer = defeatedKingdom.Settlements.ToList();
-
-                foreach (Settlement settlement in settlementsToTransfer)
-                {
-                    if (settlement.OwnerClan?.Kingdom == defeatedKingdom)
-                    {
-                        // Transfer to conquerer's ruling clan
-                        ChangeOwnerOfSettlementAction.ApplyByDefault(conquererKingdom.RulingClan.Leader, settlement);
-                        ModLogger.Log($"Transferred {settlement.Name} from {defeatedKingdom.Name} to {conquererKingdom.Name}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"Error transferring settlements from {defeatedKingdom?.Name}", ex);
-            }
-        }
-
-        /// <summary>
-        /// Vassalizes all clans from the defeated kingdom to the conquerer.
-        /// </summary>
-        private void VassalizeClans(Kingdom defeatedKingdom, Kingdom conquererKingdom)
-        {
-            try
-            {
-                var clansToVassalize = defeatedKingdom.Clans.ToList();
-
-                foreach (Clan clan in clansToVassalize)
-                {
-                    if (clan != null && !clan.IsEliminated && clan != defeatedKingdom.RulingClan)
-                    {
-                        // Make clan join conquerer kingdom as vassal
-                        ChangeKingdomAction.ApplyByJoinToKingdom(clan, conquererKingdom, false);
-                        ModLogger.Log($"Vassalized clan {clan.Name} to {conquererKingdom.Name}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"Error vassalizing clans from {defeatedKingdom?.Name}", ex);
-            }
-        }
-
-        /// <summary>
-        /// Destroys the defeated kingdom completely.
-        /// </summary>
-        private void DestroyKingdom(Kingdom defeatedKingdom)
-        {
-            try
-            {
-                if (defeatedKingdom == null || defeatedKingdom.IsEliminated)
-                    return;
-
-                DestroyKingdomAction.Apply(defeatedKingdom);
-                ModLogger.Log($"Kingdom {defeatedKingdom.Name} has been destroyed");
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"Error destroying kingdom {defeatedKingdom?.Name}", ex);
-            }
-        }
-
-        /// <summary>
-        /// Notifies the player of the kingdom conquest.
-        /// </summary>
-        private void NotifyKingdomConquest(Settlement capital, Kingdom defeatedKingdom, Kingdom conquererKingdom, Hero capturerHero)
-        {
-            try
-            {
-                string message = $"{capital.Name} has fallen! {defeatedKingdom.Name} is no more!";
-
-                InformationManager.DisplayMessage(new InformationMessage(message, Colors.Red));
-
-                if (capturerHero == Hero.MainHero)
-                {
-                    InformationManager.DisplayMessage(new InformationMessage(
-                        $"You have conquered {defeatedKingdom.Name} by capturing their capital!",
-                        Colors.Green
-                    ));
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error("Error notifying kingdom conquest", ex);
             }
         }
     }

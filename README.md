@@ -133,6 +133,57 @@ If MCM is installed, access mod settings via **Options → Mod Options → Kingd
    msbuild KingdomCapitals.csproj /p:Configuration=Release /p:Platform=x64
    ```
 
+## Project Architecture
+
+The mod follows a clean, modular architecture for maintainability and extensibility:
+
+```
+KingdomCapitals/
+├── Constants/              # Centralized constants
+│   ├── ModConstants.cs     # Mod metadata and identifiers
+│   ├── GameplayConstants.cs # Game mechanic constants
+│   ├── UIConstants.cs      # UI colors and formatting
+│   ├── LogConstants.cs     # Logging configuration
+│   └── Messages.cs         # User-facing messages
+│
+├── Core/                   # Core module functionality
+│   ├── SubModule.cs        # Mod entry point and initialization
+│   └── CapitalManager.cs   # Central capital state management
+│
+├── Behaviors/              # Campaign event handlers
+│   ├── CapitalManagementBehavior.cs  # Ruler succession
+│   ├── CapitalGarrisonBehavior.cs    # Daily reinforcement
+│   └── CapitalConquestBehavior.cs    # Conquest coordination
+│
+├── Services/               # Business logic services
+│   ├── SettlementTransferService.cs    # Settlement transfers
+│   ├── KingdomService.cs               # Kingdom operations
+│   └── ConquestNotificationService.cs  # User notifications
+│
+├── Utils/                  # Utility classes
+│   ├── CapitalData.cs      # Static capital definitions
+│   └── ModLogger.cs        # Logging system
+│
+├── Patches/                # Harmony patches
+│   ├── SettlementNameTooltipPatch.cs  # Golden name display
+│   └── CapitalOwnershipPatch.cs       # Voting prevention
+│
+├── Models/                 # Data models
+│   └── ModSettings.cs      # MCM configuration
+│
+└── ModuleData/             # Game data
+    ├── settlements.xml     # Building definitions
+    └── Languages/          # Localization
+```
+
+### Architecture Principles
+
+- **Separation of Concerns**: Each layer has a specific responsibility
+- **Centralized Constants**: All hardcoded values in `Constants/` for easy modification
+- **Service Layer**: Business logic isolated in reusable services
+- **Dependency Injection Ready**: Services are static but designed for future DI
+- **Comprehensive Documentation**: XML documentation on all public APIs
+
 ## Compatibility
 
 ### ✅ Compatible

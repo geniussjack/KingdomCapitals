@@ -5,19 +5,21 @@ using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using KingdomCapitals.Utils;
 using KingdomCapitals.Behaviors;
+using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Core
 {
     /// <summary>
     /// Main entry point for the Kingdom Capitals mod.
+    /// Handles mod initialization, Harmony patching, and campaign behavior registration.
     /// </summary>
     public class SubModule : MBSubModuleBase
     {
-        private const string HarmonyId = "com.kingdomcapitals.bannerlord";
         private Harmony _harmony;
 
         /// <summary>
         /// Called when the mod is first loaded.
+        /// Initializes Harmony patches for all mod functionality.
         /// </summary>
         protected override void OnSubModuleLoad()
         {
@@ -26,21 +28,24 @@ namespace KingdomCapitals.Core
             try
             {
                 // Initialize Harmony patches
-                _harmony = new Harmony(HarmonyId);
+                _harmony = new Harmony(ModConstants.HarmonyId);
                 _harmony.PatchAll();
 
-                ModLogger.Log("Kingdom Capitals mod loaded successfully");
-                ModLogger.Log($"Harmony patches applied: {HarmonyId}");
+                ModLogger.Log(Messages.Mod.LoadedSuccessfully);
+                ModLogger.Log(string.Format(Messages.Log.HarmonyPatchesAppliedFormat, ModConstants.HarmonyId));
             }
             catch (Exception ex)
             {
-                ModLogger.Error("Failed to load Kingdom Capitals mod", ex);
+                ModLogger.Error(Messages.Errors.FailedToLoad, ex);
             }
         }
 
         /// <summary>
         /// Called when a new game starts or a save is loaded.
+        /// Initializes the capital management system and registers campaign behaviors.
         /// </summary>
+        /// <param name="game">The game instance.</param>
+        /// <param name="gameStarterObject">The game starter object for registering behaviors.</param>
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
             base.OnGameStart(game, gameStarterObject);
@@ -59,35 +64,38 @@ namespace KingdomCapitals.Core
                     campaignStarter.AddBehavior(new CapitalGarrisonBehavior());
                     campaignStarter.AddBehavior(new CapitalConquestBehavior());
 
-                    ModLogger.Log("Campaign behaviors registered");
-                    ModLogger.Log("Kingdom Capitals mod started successfully");
+                    ModLogger.Log(Messages.Mod.BehaviorsRegistered);
+                    ModLogger.Log(Messages.Mod.StartedSuccessfully);
                 }
             }
             catch (Exception ex)
             {
-                ModLogger.Error("Failed to start Kingdom Capitals mod", ex);
+                ModLogger.Error(Messages.Errors.FailedToStart, ex);
             }
         }
 
         /// <summary>
         /// Called when the game ends.
+        /// Performs cleanup operations for the current game session.
         /// </summary>
+        /// <param name="game">The game instance that is ending.</param>
         public override void OnGameEnd(Game game)
         {
             base.OnGameEnd(game);
 
             try
             {
-                ModLogger.Log("Kingdom Capitals mod ended");
+                ModLogger.Log(Messages.Mod.Ended);
             }
             catch (Exception ex)
             {
-                ModLogger.Error("Error during mod shutdown", ex);
+                ModLogger.Error(Messages.Errors.ErrorDuringShutdown, ex);
             }
         }
 
         /// <summary>
         /// Called when the mod is unloaded.
+        /// Removes all Harmony patches applied by this mod.
         /// </summary>
         protected override void OnSubModuleUnloaded()
         {
@@ -96,12 +104,12 @@ namespace KingdomCapitals.Core
             try
             {
                 // Unpatch Harmony modifications
-                _harmony?.UnpatchAll(HarmonyId);
-                ModLogger.Log("Kingdom Capitals mod unloaded");
+                _harmony?.UnpatchAll(ModConstants.HarmonyId);
+                ModLogger.Log(Messages.Mod.Unloaded);
             }
             catch (Exception ex)
             {
-                ModLogger.Error("Error during mod unload", ex);
+                ModLogger.Error(Messages.Errors.ErrorDuringUnload, ex);
             }
         }
     }

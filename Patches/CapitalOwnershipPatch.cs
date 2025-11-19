@@ -5,6 +5,7 @@ using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Settlements;
 using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
+using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Patches
 {
@@ -19,6 +20,10 @@ namespace KingdomCapitals.Patches
         /// Prefix patch to intercept decision creation.
         /// Returns false to prevent original method execution if this is a capital settlement decision.
         /// </summary>
+        /// <param name="__instance">The Kingdom instance.</param>
+        /// <param name="decision">The kingdom decision being added.</param>
+        /// <param name="ignoreInfluenceCost">Whether to ignore influence cost for the decision.</param>
+        /// <returns>False if the decision should be blocked, true to allow normal execution.</returns>
         static bool Prefix(Kingdom __instance, KingdomDecision decision, bool ignoreInfluenceCost = false)
         {
             try
@@ -34,7 +39,7 @@ namespace KingdomCapitals.Patches
                     // Check if this settlement was recently captured as a capital
                     if (CapitalManager.WasRecentlyCapturedCapital(settlement))
                     {
-                        ModLogger.Log($"Blocked voting for recently captured capital: {settlement.Name}");
+                        ModLogger.Log(string.Format(Messages.Log.BlockedVotingFormat, settlement.Name));
 
                         // Transfer directly to ruling clan (should already be done by CapitalConquestBehavior)
                         if (__instance.RulingClan != null && settlement.OwnerClan != __instance.RulingClan)
@@ -66,6 +71,9 @@ namespace KingdomCapitals.Patches
         /// <summary>
         /// Prefix patch to prevent construction of settlement claimant decisions for capitals.
         /// </summary>
+        /// <param name="proposerClan">The clan proposing the settlement claim.</param>
+        /// <param name="settlement">The settlement being claimed.</param>
+        /// <returns>False if the decision should be blocked, true to allow normal execution.</returns>
         static bool Prefix(Clan proposerClan, Settlement settlement)
         {
             try
@@ -76,7 +84,7 @@ namespace KingdomCapitals.Patches
                 // Block decision creation for recently captured capitals
                 if (CapitalManager.WasRecentlyCapturedCapital(settlement))
                 {
-                    ModLogger.Log($"Prevented settlement claimant decision creation for capital: {settlement.Name}");
+                    ModLogger.Log(string.Format(Messages.Log.PreventedDecisionCreationFormat, settlement.Name));
                     return false; // Prevent decision creation
                 }
 
@@ -99,6 +107,9 @@ namespace KingdomCapitals.Patches
         /// <summary>
         /// Prefix patch to prevent support determination for capital settlements.
         /// </summary>
+        /// <param name="__instance">The SettlementClaimantDecision instance.</param>
+        /// <param name="__result">The supporter result to be modified.</param>
+        /// <returns>False if support determination should be blocked, true to allow normal execution.</returns>
         static bool Prefix(SettlementClaimantDecision __instance, ref Supporter __result)
         {
             try
