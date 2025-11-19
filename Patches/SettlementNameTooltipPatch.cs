@@ -9,11 +9,9 @@ using TaleWorlds.Localization;
 namespace KingdomCapitals.Patches
 {
     /// <summary>
-    /// Harmony patch to display capital settlement names with golden color markup.
-    /// Patches Settlement.Name property getter to add HTML color tags to capital names.
-    /// Uses Bannerlord's built-in color tag support for visual distinction.
-    /// NOTE: Currently disabled as TextObject does not support HTML color tags.
-    /// Color formatting in Bannerlord is handled at the UI/Widget level, not in TextObject.
+    /// Harmony patch to display capital settlement names with crown icon prefix.
+    /// Patches Settlement.Name property getter to add crown icon before capital names.
+    /// Uses Bannerlord's built-in <img> tag support for sprite icons.
     /// </summary>
     [HarmonyPatch]
     public static class SettlementNameColorPatch
@@ -32,10 +30,9 @@ namespace KingdomCapitals.Patches
         /// </summary>
         static bool Prepare()
         {
-            // DISABLED: TextObject does not support HTML color tags
-            // Color formatting must be done at UI/Widget level
-            ModLogger.Log("SettlementNameColorPatch DISABLED: TextObject does not support HTML markup");
-            return false;
+            // Enable crown icon patch
+            ModLogger.Log("SettlementNameColorPatch ENABLED: Will add crown icon to capital names");
+            return true;
         }
 
         /// <summary>
@@ -48,7 +45,7 @@ namespace KingdomCapitals.Patches
 
         /// <summary>
         /// Postfix patch for Settlement.Name getter.
-        /// Adds golden color markup to capital settlement names.
+        /// Adds crown icon before capital settlement names.
         /// </summary>
         /// <param name="__instance">The Settlement instance.</param>
         /// <param name="__result">The original name TextObject (will be modified for capitals).</param>
@@ -74,27 +71,36 @@ namespace KingdomCapitals.Patches
                 // Get the original name text
                 string originalName = __result.ToString();
 
-                // Skip if name is empty or already contains color tags
-                if (string.IsNullOrEmpty(originalName) || originalName.Contains("<color="))
+                // Skip if name is empty or already contains crown icon
+                if (string.IsNullOrEmpty(originalName) || originalName.Contains("<img"))
                     return;
 
-                // Create new TextObject with golden color markup
-                string goldColoredName = string.Format(UIConstants.ColorTagFormat, UIConstants.CapitalGoldenColorHex, originalName);
-                TextObject coloredTextObject = new TextObject(goldColoredName);
+                // Try different crown icon paths - one of these should work!
+                // Format: {=!}<img src="path" extend="size">
+                string crownIcon = "{=!}<img src=\"General\\\\Icons\\\\Crown@2x\" extend=\"8\">";
+
+                // Alternative paths to try if first doesn't work:
+                // crownIcon = "{=!}<img src=\"SPGeneral\\\\Icons\\\\Crown@2x\" extend=\"8\">";
+                // crownIcon = "{=!}<img src=\"StdAssets\\\\crown\" extend=\"8\">";
+                // crownIcon = "{=!}<img src=\"General\\\\Icons\\\\Influence@2x\" extend=\"8\">"; // Influence icon as fallback
+                // crownIcon = "👑 "; // Unicode crown as last resort
+
+                // Create new TextObject with crown icon prefix
+                string crownedName = $"{crownIcon} {originalName}";
+                TextObject crownedTextObject = new TextObject(crownedName);
 
                 // Cache the modified name
-                _capitalNameCache[__instance.StringId] = coloredTextObject;
+                _capitalNameCache[__instance.StringId] = crownedTextObject;
 
-                // Return the colored name
-                __result = coloredTextObject;
+                // Return the crowned name
+                __result = crownedTextObject;
 
-                ModLogger.Log(string.Format(Messages.Log.AppliedGoldenColorFormat, originalName));
+                ModLogger.Log($"Applied crown icon to capital name: {originalName}");
             }
             catch (Exception ex)
             {
-                // Suppress errors to avoid log spam and game crashes
-                // Only log critical errors
-                ModLogger.Error("Error in SettlementNameColorPatch", ex);
+                // Log errors for debugging
+                ModLogger.Error($"Error in SettlementNameColorPatch for {__instance?.StringId}", ex);
             }
         }
 
