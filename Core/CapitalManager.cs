@@ -7,6 +7,8 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
 using KingdomCapitals.Utils;
 using KingdomCapitals.Patches;
+using KingdomCapitals.Constants;
+using KingdomCapitals.Services;
 
 namespace KingdomCapitals.Core
 {
@@ -21,12 +23,13 @@ namespace KingdomCapitals.Core
 
         /// <summary>
         /// Initializes the capital management system.
+        /// Registers all default capitals and clears the settlement name cache.
         /// </summary>
         public static void Initialize()
         {
             if (_isInitialized)
             {
-                ModLogger.Warning("CapitalManager already initialized");
+                ModLogger.Warning(Messages.Warnings.AlreadyInitialized);
                 return;
             }
 
@@ -48,12 +51,14 @@ namespace KingdomCapitals.Core
             // Clear the settlement name cache to ensure fresh color markup
             SettlementNameColorPatch.ClearCache();
 
-            ModLogger.Log($"CapitalManager initialized with {_activeCapitals.Count} capitals");
+            ModLogger.Log(string.Format(Messages.Log.CapitalManagerInitializedFormat, _activeCapitals.Count));
         }
 
         /// <summary>
         /// Checks if a settlement is currently registered as a capital.
         /// </summary>
+        /// <param name="settlement">The settlement to check.</param>
+        /// <returns>True if the settlement is a capital, false otherwise.</returns>
         public static bool IsCapital(Settlement settlement)
         {
             if (settlement == null || !_isInitialized)
@@ -65,6 +70,8 @@ namespace KingdomCapitals.Core
         /// <summary>
         /// Gets the current capital of a kingdom.
         /// </summary>
+        /// <param name="kingdom">The kingdom whose capital to retrieve.</param>
+        /// <returns>The capital settlement or null if not found.</returns>
         public static Settlement GetCapital(Kingdom kingdom)
         {
             if (kingdom == null || !_isInitialized)
@@ -77,6 +84,7 @@ namespace KingdomCapitals.Core
         /// <summary>
         /// Gets all currently active capitals.
         /// </summary>
+        /// <returns>A collection of all active capital settlements.</returns>
         public static IEnumerable<Settlement> GetAllCapitals()
         {
             return _isInitialized ? _activeCapitals.Values : Enumerable.Empty<Settlement>();
@@ -85,6 +93,8 @@ namespace KingdomCapitals.Core
         /// <summary>
         /// Unregisters a settlement as a capital (called when kingdom is destroyed).
         /// </summary>
+        /// <param name="settlement">The settlement to unregister.</param>
+        /// <param name="defeatedKingdom">The kingdom being defeated.</param>
         public static void UnregisterCapital(Settlement settlement, Kingdom defeatedKingdom)
         {
             if (settlement == null || defeatedKingdom == null || !_isInitialized)
@@ -98,14 +108,16 @@ namespace KingdomCapitals.Core
 
         /// <summary>
         /// Marks a capital as recently captured to prevent voting for distribution.
+        /// The mark is automatically removed after one in-game day.
         /// </summary>
+        /// <param name="capital">The capital settlement to mark.</param>
         public static void MarkAsRecentlyCaptured(Settlement capital)
         {
             if (capital == null || !_isInitialized)
                 return;
 
             _recentlyCapturedCapitals.Add(capital);
-            ModLogger.Log($"Marked {capital.Name} as recently captured capital");
+            ModLogger.Log(string.Format(Messages.Log.MarkedAsRecentlyCapturedFormat, capital.Name));
 
             // Remove mark after 1 in-game day
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(null, () =>
@@ -117,6 +129,8 @@ namespace KingdomCapitals.Core
         /// <summary>
         /// Checks if a settlement was recently captured as a capital.
         /// </summary>
+        /// <param name="settlement">The settlement to check.</param>
+        /// <returns>True if the settlement was recently captured as a capital, false otherwise.</returns>
         public static bool WasRecentlyCapturedCapital(Settlement settlement)
         {
             if (!_isInitialized)
@@ -128,33 +142,27 @@ namespace KingdomCapitals.Core
         /// <summary>
         /// Transfers capital ownership to a new ruler.
         /// </summary>
-        public static void TransferCapitalOwnership(Hero newOwner, Settlement capital)
+        /// <param name="newOwner">The hero who will become the new owner.</param>
+        /// <param name="capital">The capital settlement to transfer.</param>
+        /// <returns>True if transfer was successful, false otherwise.</returns>
+        public static bool TransferCapitalOwnership(Hero newOwner, Settlement capital)
         {
-            if (newOwner == null || capital == null)
-            {
-                ModLogger.Error("TransferCapitalOwnership: null parameters");
-                return;
-            }
-
-            try
-            {
-                ChangeOwnerOfSettlementAction.ApplyByDefault(newOwner, capital);
-                ModLogger.Log($"Transferred capital {capital.Name} to {newOwner.Name}");
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"Failed to transfer capital ownership: {capital.Name}", ex);
-            }
+            return SettlementTransferService.TransferSettlement(capital, newOwner);
         }
 
         /// <summary>
         /// Handles the complete conquest of a kingdom when its capital is captured.
+        /// Transfers the capital, removes capital status, and notifies the player.
         /// </summary>
+        /// <param name="capital">The capital settlement that was captured.</param>
+        /// <param name="attackerKingdom">The kingdom that captured the capital.</param>
+        /// <param name="defenderKingdom">The kingdom that lost the capital.</param>
+        /// <param name="capturerHero">The hero who captured the capital.</param>
         public static void HandleCapitalConquest(Settlement capital, Kingdom attackerKingdom, Kingdom defenderKingdom, Hero capturerHero)
         {
             if (capital == null || attackerKingdom == null || defenderKingdom == null)
             {
-                ModLogger.Error("HandleCapitalConquest: null parameters");
+                ModLogger.Error(Messages.Errors.HandleCapitalConquestNullParameters);
                 return;
             }
 
@@ -166,16 +174,13 @@ namespace KingdomCapitals.Core
                 MarkAsRecentlyCaptured(capital);
 
                 // Transfer capital directly to ruling clan
-                TransferCapitalToRulingClan(capital, attackerKingdom);
+                SettlementTransferService.TransferCapitalToRulingClan(capital, attackerKingdom);
 
                 // Remove capital status
                 UnregisterCapital(capital, defenderKingdom);
 
                 // Notify player
-                InformationManager.DisplayMessage(new InformationMessage(
-                    $"{capital.Name} conquered! {defenderKingdom.Name} has fallen!",
-                    Colors.Red
-                ));
+                ConquestNotificationService.NotifyKingdomConquest(capital, defenderKingdom, attackerKingdom, capturerHero);
             }
             catch (Exception ex)
             {
@@ -184,37 +189,15 @@ namespace KingdomCapitals.Core
         }
 
         /// <summary>
-        /// Transfers captured capital directly to the ruling clan without voting.
-        /// </summary>
-        private static void TransferCapitalToRulingClan(Settlement capital, Kingdom conquererKingdom)
-        {
-            if (conquererKingdom?.RulingClan == null)
-            {
-                ModLogger.Error("TransferCapitalToRulingClan: null ruling clan");
-                return;
-            }
-
-            try
-            {
-                Hero rulingClanLeader = conquererKingdom.RulingClan.Leader;
-                ChangeOwnerOfSettlementAction.ApplyByDefault(rulingClanLeader, capital);
-
-                ModLogger.Log($"Capital {capital.Name} transferred to ruling clan {conquererKingdom.RulingClan.Name}");
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error($"Failed to transfer capital to ruling clan: {capital.Name}", ex);
-            }
-        }
-
-        /// <summary>
         /// Creates a new kingdom for a player who captured a capital without having one.
         /// </summary>
+        /// <param name="playerHero">The player hero who captured the capital.</param>
+        /// <param name="capital">The capital settlement that was captured.</param>
         public static void CreatePlayerKingdomFromCapital(Hero playerHero, Settlement capital)
         {
             if (playerHero == null || capital == null || playerHero.Clan == null)
             {
-                ModLogger.Error("CreatePlayerKingdomFromCapital: null parameters");
+                ModLogger.Error(Messages.Errors.CreatePlayerKingdomNullParameters);
                 return;
             }
 
@@ -228,16 +211,16 @@ namespace KingdomCapitals.Core
 
                 if (newKingdom == null)
                 {
-                    ModLogger.Warning($"Player {playerHero.Name} captured capital {capital.Name} but kingdom creation requires manual action");
+                    ModLogger.Warning(string.Format(Messages.Warnings.PlayerCreatedKingdomManualAction, playerHero.Name, capital.Name));
                     InformationManager.DisplayMessage(new InformationMessage(
-                        $"You have captured {capital.Name}! Found your kingdom to claim it as your capital.",
-                        Colors.Green
+                        string.Format(Messages.Conquest.PlayerCapturedCapitalFoundKingdomFormat, capital.Name),
+                        UIConstants.MessageColors.Success
                     ));
                 }
                 else
                 {
                     _activeCapitals[newKingdom.StringId] = capital;
-                    ModLogger.Log($"Created new kingdom for player: {kingdomName} with capital {capital.Name}");
+                    ModLogger.Log(string.Format(Messages.Log.CreatedPlayerKingdomFormat, kingdomName, capital.Name));
                 }
             }
             catch (Exception ex)

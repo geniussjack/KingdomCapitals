@@ -4,16 +4,14 @@ using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Localization;
 using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
+using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Patches
 {
     /// <summary>
     /// Harmony patch to display capital settlement names with golden color markup.
-    ///
     /// Patches Settlement.Name property getter to add HTML color tags to capital names.
-    /// Golden color: #cbae79 (RGB: 203, 174, 121)
-    ///
-    /// Uses Bannerlord's built-in color tag support: &lt;color=#RRGGBB&gt;text&lt;/color&gt;
+    /// Uses Bannerlord's built-in color tag support for visual distinction.
     /// </summary>
     [HarmonyPatch(typeof(Settlement), "Name", MethodType.Getter)]
     public static class SettlementNameColorPatch
@@ -30,8 +28,8 @@ namespace KingdomCapitals.Patches
         /// Postfix patch for Settlement.Name getter.
         /// Adds golden color markup to capital settlement names.
         /// </summary>
-        /// <param name="__instance">The Settlement instance</param>
-        /// <param name="__result">The original name TextObject (will be modified for capitals)</param>
+        /// <param name="__instance">The Settlement instance.</param>
+        /// <param name="__result">The original name TextObject (will be modified for capitals).</param>
         static void Postfix(Settlement __instance, ref TextObject __result)
         {
             try
@@ -59,8 +57,7 @@ namespace KingdomCapitals.Patches
                     return;
 
                 // Create new TextObject with golden color markup
-                // Format: <color=#cbae79>Settlement Name</color>
-                string goldColoredName = $"<color=#cbae79>{originalName}</color>";
+                string goldColoredName = string.Format(UIConstants.ColorTagFormat, UIConstants.CapitalGoldenColorHex, originalName);
                 TextObject coloredTextObject = new TextObject(goldColoredName);
 
                 // Cache the modified name
@@ -69,7 +66,7 @@ namespace KingdomCapitals.Patches
                 // Return the colored name
                 __result = coloredTextObject;
 
-                ModLogger.Log($"Applied golden color markup to capital name: {originalName}");
+                ModLogger.Log(string.Format(Messages.Log.AppliedGoldenColorFormat, originalName));
             }
             catch (Exception ex)
             {
@@ -86,7 +83,7 @@ namespace KingdomCapitals.Patches
         public static void ClearCache()
         {
             _capitalNameCache.Clear();
-            ModLogger.Log("Capital name cache cleared");
+            ModLogger.Log(Messages.Log.CapitalNameCacheCleared);
         }
     }
 }
