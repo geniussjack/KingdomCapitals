@@ -35,51 +35,8 @@ namespace KingdomCapitals.Core
             _activeCapitals = new Dictionary<string, Settlement>();
             _recentlyCapturedCapitals = new HashSet<Settlement>();
 
-            // Log all kingdoms for debugging
-            ModLogger.Log($"Found {Kingdom.All.Count()} kingdoms in game:");
-            foreach (Kingdom kingdom in Kingdom.All)
-            {
-                ModLogger.Log($"  Kingdom: {kingdom.Name} (StringId: '{kingdom.StringId}')");
-            }
-
-            // DIAGNOSTIC: Log all town settlements to find correct capital StringIds
-            ModLogger.Log("=== ALL TOWN SETTLEMENTS ===");
-            try
-            {
-                var allSettlements = Settlement.All;
-                if (allSettlements != null)
-                {
-                    foreach (var settlement in allSettlements)
-                    {
-                        try
-                        {
-                            if (settlement != null && settlement.IsTown)
-                            {
-                                // Use StringId directly to avoid triggering Name getter patch
-                                string settlementId = settlement.StringId ?? "unknown";
-                                var kingdom = settlement.OwnerClan?.Kingdom;
-                                string kingdomName = kingdom?.Name?.ToString() ?? "None";
-
-                                // Get name safely - this WILL trigger our patch, but that's okay
-                                string settlementName = settlement.Name?.ToString() ?? "Unknown";
-
-                                ModLogger.Log($"  Town: {settlementName} | StringId: '{settlementId}' | Kingdom: {kingdomName}");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            ModLogger.Error($"Error logging settlement", ex);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error("Error iterating settlements", ex);
-            }
-            ModLogger.Log("=== END TOWN SETTLEMENTS ===");
-
             // Register all default capitals
+            ModLogger.Log($"Registering capitals for {Kingdom.All.Count()} kingdoms...");
             foreach (Kingdom kingdom in Kingdom.All)
             {
                 Settlement capital = CapitalData.GetDefaultCapital(kingdom);
