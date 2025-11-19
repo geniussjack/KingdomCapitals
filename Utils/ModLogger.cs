@@ -81,9 +81,9 @@ namespace KingdomCapitals.Utils
         public static void LogCapitalConquest(Settlement capital, Kingdom oldKingdom, Kingdom newKingdom, Hero capturerHero)
         {
             string message = $"CAPITAL CONQUERED: {capital.Name} | " +
-                           $"Old Owner: {oldKingdom?.Name ?? "None"} | " +
-                           $"New Owner: {newKingdom?.Name ?? "None"} | " +
-                           $"Capturer: {capturerHero?.Name ?? "Unknown"}";
+                           $"Old Owner: {oldKingdom?.Name?.ToString() ?? "None"} | " +
+                           $"New Owner: {newKingdom?.Name?.ToString() ?? "None"} | " +
+                           $"Capturer: {capturerHero?.Name?.ToString() ?? "Unknown"}";
             Log(message);
         }
 
@@ -93,7 +93,7 @@ namespace KingdomCapitals.Utils
         public static void LogCapitalStatusRemoval(Settlement formerCapital, Kingdom defeatedKingdom)
         {
             string message = $"CAPITAL STATUS REMOVED: {formerCapital.Name} | " +
-                           $"Defeated Kingdom: {defeatedKingdom?.Name ?? "Unknown"}";
+                           $"Defeated Kingdom: {defeatedKingdom?.Name?.ToString() ?? "Unknown"}";
             Log(message);
         }
 

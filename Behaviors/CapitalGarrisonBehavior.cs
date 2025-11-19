@@ -103,7 +103,7 @@ namespace KingdomCapitals.Behaviors
         {
             int prosperityPerTier = Settings?.ProsperityPerTroopTier ?? 2500;
             int tier = (int)(prosperity / prosperityPerTier);
-            return MathF.Clamp(tier, 0, 6); // Bannerlord max tier is 6
+            return (int)MathF.Clamp(tier, 0, 6); // Bannerlord max tier is 6
         }
 
         /// <summary>
@@ -156,7 +156,8 @@ namespace KingdomCapitals.Behaviors
                 float consumptionMultiplier = Settings?.GarrisonFoodConsumptionMultiplier ?? 0.5f;
 
                 // Calculate food consumption reduction
-                float normalConsumption = settlement.Town.GarrisonParty.Party.NumberOfAllMembers * Campaign.Current.Models.PartyFoodBuyingModel.LowMoraleModeFoodConsumptionMultiplier;
+                // Base consumption is approximately 1 food per party member per day
+                float normalConsumption = settlement.Town.GarrisonParty.Party.NumberOfAllMembers * 1.0f;
                 float reducedConsumption = normalConsumption * consumptionMultiplier;
                 float foodSavings = normalConsumption - reducedConsumption;
 

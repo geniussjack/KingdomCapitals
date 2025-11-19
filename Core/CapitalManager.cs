@@ -226,7 +226,7 @@ namespace KingdomCapitals.Core
                     ModLogger.Warning($"Player {playerHero.Name} captured capital {capital.Name} but kingdom creation requires manual action");
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"You have captured {capital.Name}! Found your kingdom to claim it as your capital.",
-                        Colors.Gold
+                        Colors.Green
                     ));
                 }
                 else
