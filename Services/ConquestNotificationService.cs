@@ -1,7 +1,7 @@
+using KingdomCapitals.Constants;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
-using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Services
 {

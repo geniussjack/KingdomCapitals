@@ -1,11 +1,11 @@
-using System;
 using HarmonyLib;
+using KingdomCapitals.Behaviors;
+using KingdomCapitals.Constants;
+using KingdomCapitals.Utils;
+using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
-using KingdomCapitals.Utils;
-using KingdomCapitals.Behaviors;
-using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Core
 {

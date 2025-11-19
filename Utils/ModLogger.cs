@@ -1,9 +1,9 @@
+using KingdomCapitals.Constants;
 using System;
 using System.IO;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
-using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Utils
 {

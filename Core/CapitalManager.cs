@@ -1,14 +1,13 @@
+using KingdomCapitals.Constants;
+using KingdomCapitals.Patches;
+using KingdomCapitals.Services;
+using KingdomCapitals.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Library;
-using KingdomCapitals.Utils;
-using KingdomCapitals.Patches;
-using KingdomCapitals.Constants;
-using KingdomCapitals.Services;
 
 namespace KingdomCapitals.Core
 {

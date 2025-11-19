@@ -1,10 +1,10 @@
+using KingdomCapitals.Constants;
+using KingdomCapitals.Core;
+using KingdomCapitals.Utils;
 using System;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
-using KingdomCapitals.Core;
-using KingdomCapitals.Utils;
-using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Behaviors
 {

@@ -1,10 +1,10 @@
-using System;
 using HarmonyLib;
-using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.Localization;
+using KingdomCapitals.Constants;
 using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
-using KingdomCapitals.Constants;
+using System;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Localization;
 
 namespace KingdomCapitals.Patches
 {

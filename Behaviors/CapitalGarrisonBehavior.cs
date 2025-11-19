@@ -1,15 +1,12 @@
+using KingdomCapitals.Constants;
+using KingdomCapitals.Core;
+using KingdomCapitals.Models;
+using KingdomCapitals.Utils;
 using System;
-using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using KingdomCapitals.Core;
-using KingdomCapitals.Utils;
-using KingdomCapitals.Models;
-using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Behaviors
 {

@@ -104,6 +104,11 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Core -->
+    <Compile Include="Constants\GameplayConstants.cs" />
+    <Compile Include="Constants\LogConstants.cs" />
+    <Compile Include="Constants\Messages.cs" />
+    <Compile Include="Constants\ModConstants.cs" />
+    <Compile Include="Constants\UIConstants.cs" />
     <Compile Include="Core\SubModule.cs" />
     <Compile Include="Core\CapitalManager.cs" />
     <!-- Behaviors -->
@@ -113,38 +118,42 @@
     <!-- Models -->
     <Compile Include="Models\ModSettings.cs" />
     <!-- Utils -->
+    <Compile Include="Services\ConquestNotificationService.cs" />
+    <Compile Include="Services\KingdomService.cs" />
+    <Compile Include="Services\SettlementTransferService.cs" />
     <Compile Include="Utils\CapitalData.cs" />
     <Compile Include="Utils\ModLogger.cs" />
     <!-- Patches -->
     <Compile Include="Patches\SettlementNameTooltipPatch.cs" />
     <Compile Include="Patches\CapitalOwnershipPatch.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="SubModule.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
   <!-- Copy SubModule.xml and ModuleData to output -->
   <Target Name="CopyModuleFiles" AfterTargets="Build">
     <!-- Debug: Copy to project bin folder -->
     <PropertyGroup Condition="'$(Configuration)'=='Debug'">
       <ModuleOutputPath>bin\</ModuleOutputPath>
     </PropertyGroup>
-
     <!-- Release: Copy to game modules folder -->
     <PropertyGroup Condition="'$(Configuration)'=='Release'">
       <ModuleOutputPath>$(ModulesFolder)\KingdomCapitals\</ModuleOutputPath>
     </PropertyGroup>
-
     <!-- Copy SubModule.xml -->
     <Copy SourceFiles="SubModule.xml" DestinationFiles="$(ModuleOutputPath)SubModule.xml" SkipUnchangedFiles="true" />
-
     <!-- Copy entire ModuleData folder -->
     <ItemGroup>
       <ModuleDataFiles Include="ModuleData\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(ModuleDataFiles)" DestinationFiles="@(ModuleDataFiles->'$(ModuleOutputPath)ModuleData\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-
     <Message Text="[$(Configuration)] Copied SubModule.xml and ModuleData to: $(ModuleOutputPath)" Importance="high" />
   </Target>
-
   <!-- Clean unnecessary files -->
   <Target Name="CleanOutputFiles" AfterTargets="Build">
     <!-- Always delete these files -->
@@ -157,13 +166,11 @@
       <FilesToDelete Include="$(OutputPath)SandBox*.dll" />
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
-
     <!-- Delete .pdb only in Release -->
     <ItemGroup Condition="'$(Configuration)'=='Release'">
       <PdbFilesToDelete Include="$(OutputPath)*.pdb" />
     </ItemGroup>
     <Delete Files="@(PdbFilesToDelete)" Condition="'$(Configuration)'=='Release'" />
-
     <Message Text="Cleaned unnecessary files from output (game DLLs should come from game installation)" Importance="high" />
   </Target>
 </Project>
