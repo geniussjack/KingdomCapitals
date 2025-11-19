@@ -13,9 +13,18 @@ namespace KingdomCapitals.Patches
     /// Patches Settlement.Name property getter to add HTML color tags to capital names.
     /// Uses Bannerlord's built-in color tag support for visual distinction.
     /// </summary>
-    [HarmonyPatch(typeof(Settlement), "Name", MethodType.Getter)]
+    [HarmonyPatch]
     public static class SettlementNameColorPatch
     {
+        /// <summary>
+        /// Manually specifies the target property getter to patch.
+        /// </summary>
+        /// <returns>MethodBase of the Settlement.Name getter.</returns>
+        static System.Reflection.MethodBase TargetMethod()
+        {
+            return AccessTools.PropertyGetter(typeof(Settlement), "Name");
+        }
+
         /// <summary>
         /// Cache to track which settlements have already been marked as capitals.
         /// Prevents redundant text modifications and improves performance.

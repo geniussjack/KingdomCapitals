@@ -13,9 +13,23 @@ namespace KingdomCapitals.Patches
     /// Harmony patch to prevent voting on captured capital settlements.
     /// Ensures capitals are transferred directly to the ruling clan without democratic decision.
     /// </summary>
-    [HarmonyPatch(typeof(Kingdom), "AddDecision", new Type[] { typeof(KingdomDecision), typeof(bool) })]
+    [HarmonyPatch]
     public static class Kingdom_AddDecision_Patch
     {
+        /// <summary>
+        /// Manually specifies the target method to patch.
+        /// Required for methods with optional parameters.
+        /// </summary>
+        /// <returns>MethodBase of the AddDecision method.</returns>
+        static System.Reflection.MethodBase TargetMethod()
+        {
+            return AccessTools.Method(
+                typeof(Kingdom),
+                "AddDecision",
+                new Type[] { typeof(KingdomDecision), typeof(bool) }
+            );
+        }
+
         /// <summary>
         /// Prefix patch to intercept decision creation.
         /// Returns false to prevent original method execution if this is a capital settlement decision.
@@ -24,7 +38,7 @@ namespace KingdomCapitals.Patches
         /// <param name="decision">The kingdom decision being added.</param>
         /// <param name="ignoreInfluenceCost">Whether to ignore influence cost for the decision.</param>
         /// <returns>False if the decision should be blocked, true to allow normal execution.</returns>
-        static bool Prefix(Kingdom __instance, KingdomDecision decision, bool ignoreInfluenceCost = false)
+        static bool Prefix(Kingdom __instance, KingdomDecision decision, bool ignoreInfluenceCost)
         {
             try
             {
@@ -65,9 +79,21 @@ namespace KingdomCapitals.Patches
     /// Alternative patch for settlement claiming decision proposals.
     /// Prevents settlement claimant proposals for recently captured capitals.
     /// </summary>
-    [HarmonyPatch(typeof(SettlementClaimantDecision), MethodType.Constructor, new Type[] { typeof(Clan), typeof(Settlement) })]
+    [HarmonyPatch]
     public static class SettlementClaimantDecision_Constructor_Patch
     {
+        /// <summary>
+        /// Manually specifies the target constructor to patch.
+        /// </summary>
+        /// <returns>MethodBase of the SettlementClaimantDecision constructor.</returns>
+        static System.Reflection.MethodBase TargetMethod()
+        {
+            return AccessTools.Constructor(
+                typeof(SettlementClaimantDecision),
+                new Type[] { typeof(Clan), typeof(Settlement) }
+            );
+        }
+
         /// <summary>
         /// Prefix patch to prevent construction of settlement claimant decisions for capitals.
         /// </summary>
@@ -101,9 +127,18 @@ namespace KingdomCapitals.Patches
     /// <summary>
     /// Patch to prevent AI lords from requesting captured capitals in diplomatic discussions.
     /// </summary>
-    [HarmonyPatch(typeof(SettlementClaimantDecision), "DetermineSupport")]
+    [HarmonyPatch]
     public static class SettlementClaimantDecision_DetermineSupport_Patch
     {
+        /// <summary>
+        /// Manually specifies the target method to patch.
+        /// </summary>
+        /// <returns>MethodBase of the DetermineSupport method.</returns>
+        static System.Reflection.MethodBase TargetMethod()
+        {
+            return AccessTools.Method(typeof(SettlementClaimantDecision), "DetermineSupport");
+        }
+
         /// <summary>
         /// Prefix patch to prevent support determination for capital settlements.
         /// </summary>
