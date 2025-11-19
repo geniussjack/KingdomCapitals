@@ -87,7 +87,7 @@ namespace KingdomCapitals.Behaviors
                 // Notify player to found kingdom
                 InformationManager.DisplayMessage(new InformationMessage(
                     $"You have captured {capital.Name}, the capital of {defeatedKingdom.Name}! Found your own kingdom to complete the conquest.",
-                    Colors.Gold
+                    Colors.Green
                 ));
 
                 // The player must manually found a kingdom
@@ -261,7 +261,7 @@ namespace KingdomCapitals.Behaviors
                 {
                     InformationManager.DisplayMessage(new InformationMessage(
                         $"You have conquered {defeatedKingdom.Name} by capturing their capital!",
-                        Colors.Gold
+                        Colors.Green
                     ));
                 }
             }
