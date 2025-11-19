@@ -42,6 +42,19 @@ namespace KingdomCapitals.Core
                 ModLogger.Log($"  Kingdom: {kingdom.Name} (StringId: '{kingdom.StringId}')");
             }
 
+            // DIAGNOSTIC: Log all town settlements to find correct capital StringIds
+            ModLogger.Log("=== ALL TOWN SETTLEMENTS ===");
+            foreach (var settlement in Settlement.All)
+            {
+                if (settlement.IsTown)
+                {
+                    var kingdom = settlement.OwnerClan?.Kingdom;
+                    string kingdomName = kingdom?.Name?.ToString() ?? "None";
+                    ModLogger.Log($"  Town: {settlement.Name} | StringId: '{settlement.StringId}' | Kingdom: {kingdomName}");
+                }
+            }
+            ModLogger.Log("=== END TOWN SETTLEMENTS ===");
+
             // Register all default capitals
             foreach (Kingdom kingdom in Kingdom.All)
             {

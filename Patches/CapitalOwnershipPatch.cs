@@ -57,41 +57,12 @@ namespace KingdomCapitals.Patches
         {
             try
             {
-                // Log all methods in Kingdom class that contain "Decision"
-                var allMethods = typeof(Kingdom).GetMethods(
-                    System.Reflection.BindingFlags.Public |
-                    System.Reflection.BindingFlags.NonPublic |
-                    System.Reflection.BindingFlags.Instance |
-                    System.Reflection.BindingFlags.Static
-                );
-
-                ModLogger.Log("Searching for AddDecision method in Kingdom class...");
-                foreach (var m in allMethods)
-                {
-                    if (m.Name.Contains("Decision"))
-                    {
-                        var parameters = m.GetParameters();
-                        var paramStr = string.Join(", ", parameters.Select(p => $"{p.ParameterType.Name} {p.Name}"));
-                        ModLogger.Log($"Found method: {m.Name}({paramStr})");
-                    }
-                }
-
                 // Try to find the specific method
                 var method = AccessTools.Method(
                     typeof(Kingdom),
                     "AddDecision",
                     new Type[] { typeof(KingdomDecision), typeof(bool) }
                 );
-
-                if (method == null)
-                {
-                    // Try without the bool parameter
-                    method = AccessTools.Method(typeof(Kingdom), "AddDecision", new Type[] { typeof(KingdomDecision) });
-                    if (method != null)
-                    {
-                        ModLogger.Log("Found AddDecision with single parameter only");
-                    }
-                }
 
                 bool canPatch = method != null;
                 ModLogger.Log($"Kingdom_AddDecision_Patch.Prepare: {(canPatch ? "Ready to patch" : "Cannot patch - method not found")}");
