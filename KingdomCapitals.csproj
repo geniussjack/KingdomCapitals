@@ -15,6 +15,12 @@
     <LangVersion>9.0</LangVersion>
     <GameFolder>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
     <ModulesFolder>$(GameFolder)\Modules</ModulesFolder>
+    <!-- Assembly Metadata (moved from AssemblyInfo.cs) -->
+    <AssemblyTitle>KingdomCapitals</AssemblyTitle>
+    <Product>KingdomCapitals</Product>
+    <Copyright>Copyright © 2025</Copyright>
+    <Version>1.0.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +51,7 @@
     <Reference Include="System.Xml" />
     <!-- Harmony -->
     <Reference Include="0Harmony, Version=2.3.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\0Harmony.dll</HintPath>
+      <HintPath>$(ModulesFolder)\Bannerlord.Harmony\bin\Win64_Shipping_Client\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <!-- Bannerlord Core -->
@@ -75,11 +81,11 @@
     </Reference>
     <!-- Bannerlord Campaign -->
     <Reference Include="TaleWorlds.CampaignSystem">
-      <HintPath>$(GameFolder)\Modules\SandBox\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
+      <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="TaleWorlds.CampaignSystem.ViewModelCollection">
-      <HintPath>$(GameFolder)\Modules\SandBox\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.ViewModelCollection.dll</HintPath>
+      <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.ViewModelCollection.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SandBox">
@@ -97,7 +103,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <!-- Core -->
     <Compile Include="Core\SubModule.cs" />
     <Compile Include="Core\CapitalManager.cs" />
