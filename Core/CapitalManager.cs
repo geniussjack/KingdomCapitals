@@ -44,14 +44,38 @@ namespace KingdomCapitals.Core
 
             // DIAGNOSTIC: Log all town settlements to find correct capital StringIds
             ModLogger.Log("=== ALL TOWN SETTLEMENTS ===");
-            foreach (var settlement in Settlement.All)
+            try
             {
-                if (settlement.IsTown)
+                var allSettlements = Settlement.All;
+                if (allSettlements != null)
                 {
-                    var kingdom = settlement.OwnerClan?.Kingdom;
-                    string kingdomName = kingdom?.Name?.ToString() ?? "None";
-                    ModLogger.Log($"  Town: {settlement.Name} | StringId: '{settlement.StringId}' | Kingdom: {kingdomName}");
+                    foreach (var settlement in allSettlements)
+                    {
+                        try
+                        {
+                            if (settlement != null && settlement.IsTown)
+                            {
+                                // Use StringId directly to avoid triggering Name getter patch
+                                string settlementId = settlement.StringId ?? "unknown";
+                                var kingdom = settlement.OwnerClan?.Kingdom;
+                                string kingdomName = kingdom?.Name?.ToString() ?? "None";
+
+                                // Get name safely - this WILL trigger our patch, but that's okay
+                                string settlementName = settlement.Name?.ToString() ?? "Unknown";
+
+                                ModLogger.Log($"  Town: {settlementName} | StringId: '{settlementId}' | Kingdom: {kingdomName}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ModLogger.Error($"Error logging settlement", ex);
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error("Error iterating settlements", ex);
             }
             ModLogger.Log("=== END TOWN SETTLEMENTS ===");
 
