@@ -72,7 +72,18 @@ namespace KingdomCapitals.Core
         /// <returns>True if the settlement is a capital, false otherwise.</returns>
         public static bool IsCapital(Settlement settlement)
         {
-            if (settlement == null || !_isInitialized)
+            if (settlement == null)
+                return false;
+
+            // Lazy initialization if kingdoms weren't loaded during OnGameStart
+            if (_isInitialized && _activeCapitals.Count == 0 && Kingdom.All.Count() > 0)
+            {
+                ModLogger.Log("Lazy re-initialization: Kingdoms are now available, re-registering capitals...");
+                _isInitialized = false;
+                Initialize();
+            }
+
+            if (!_isInitialized)
                 return false;
 
             return _activeCapitals.ContainsValue(settlement);
