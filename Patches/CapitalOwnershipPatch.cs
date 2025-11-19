@@ -176,9 +176,14 @@ namespace KingdomCapitals.Patches
         /// </summary>
         static bool Prepare()
         {
-            // TEMPORARILY DISABLE THIS PATCH TO TEST OTHER PATCHES
-            ModLogger.Log("TEMPORARILY DISABLED SettlementClaimantDecision_Constructor_Patch to test other patches");
-            return false;
+            var constructor = AccessTools.Constructor(
+                typeof(SettlementClaimantDecision),
+                new Type[] { typeof(Clan), typeof(Settlement) }
+            );
+
+            bool canPatch = constructor != null;
+            ModLogger.Log($"SettlementClaimantDecision_Constructor_Patch.Prepare: {(canPatch ? "ENABLED - Testing constructor patch" : "Cannot patch - constructor not found")}");
+            return canPatch;
         }
 
         /// <summary>

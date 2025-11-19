@@ -42,6 +42,31 @@ namespace KingdomCapitals.Utils
         }
 
         /// <summary>
+        /// Clears the log file at the start of a new session.
+        /// </summary>
+        public static void ClearLog()
+        {
+            try
+            {
+                lock (_lockObject)
+                {
+                    if (File.Exists(LogFilePath))
+                    {
+                        File.Delete(LogFilePath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // If we can't clear the log, just continue - not critical
+                InformationManager.DisplayMessage(new InformationMessage(
+                    $"Failed to clear log file: {ex.Message}",
+                    UIConstants.MessageColors.Warning
+                ));
+            }
+        }
+
+        /// <summary>
         /// Logs an informational message.
         /// </summary>
         /// <param name="message">The message to log.</param>
