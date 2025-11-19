@@ -27,6 +27,9 @@ namespace KingdomCapitals.Core
 
             try
             {
+                // Clear log file at start of new session
+                ModLogger.ClearLog();
+
                 // Initialize Harmony patches
                 _harmony = new Harmony(ModConstants.HarmonyId);
 
