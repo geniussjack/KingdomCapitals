@@ -1,78 +1,92 @@
 using System;
 using HarmonyLib;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapBar;
-using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
 
 namespace KingdomCapitals.Patches
 {
     /// <summary>
-    /// Harmony patches to display capital settlement names with golden background color.
+    /// Harmony patch to display capital settlement names with golden color markup.
     ///
-    /// Patches MapInfoVM class to override settlement color for capitals.
+    /// Patches Settlement.Name property getter to add HTML color tags to capital names.
     /// Golden color: #cbae79 (RGB: 203, 174, 121)
     ///
-    /// Based on Bannerlord v1.2.12 DLL analysis:
-    /// - Class: TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapBar.MapInfoVM
-    /// - Method: UpdateTargetSettlement(Settlement settlement)
-    /// - Property: SettlementColor (Color type)
+    /// Uses Bannerlord's built-in color tag support: &lt;color=#RRGGBB&gt;text&lt;/color&gt;
     /// </summary>
-    [HarmonyPatch(typeof(MapInfoVM))]
-    public static class SettlementNameTooltipPatch
+    [HarmonyPatch(typeof(Settlement), "Name", MethodType.Getter)]
+    public static class SettlementNameColorPatch
     {
         /// <summary>
-        /// Golden color for capital settlements (#cbae79)
+        /// Cache to track which settlements have already been marked as capitals.
+        /// Prevents redundant text modifications and improves performance.
+        /// Key: Settlement.StringId, Value: modified TextObject
         /// </summary>
-        private static readonly Color GoldColor = new Color(203f / 255f, 174f / 255f, 121f / 255f, 1f);
+        private static readonly System.Collections.Generic.Dictionary<string, TextObject> _capitalNameCache
+            = new System.Collections.Generic.Dictionary<string, TextObject>();
 
         /// <summary>
-        /// Patch for UpdateTargetSettlement method to apply golden color to capitals.
-        /// This is the primary patch that modifies the settlement color when hovering over settlements on the campaign map.
+        /// Postfix patch for Settlement.Name getter.
+        /// Adds golden color markup to capital settlement names.
         /// </summary>
-        [HarmonyPatch("UpdateTargetSettlement")]
-        [HarmonyPostfix]
-        public static void UpdateTargetSettlement_Postfix(MapInfoVM __instance, Settlement settlement)
+        /// <param name="__instance">The Settlement instance</param>
+        /// <param name="__result">The original name TextObject (will be modified for capitals)</param>
+        static void Postfix(Settlement __instance, ref TextObject __result)
         {
             try
             {
-                // Check if settlement is a capital
-                if (settlement != null && CapitalManager.IsCapital(settlement))
-                {
-                    // Apply golden color to capital settlement
-                    __instance.SettlementColor = GoldColor;
+                // Skip if settlement is null or result is null
+                if (__instance == null || __result == null)
+                    return;
 
-                    ModLogger.Log($"Applied golden color to capital tooltip: {settlement.Name}");
+                // Check if this settlement is a capital
+                if (!CapitalManager.IsCapital(__instance))
+                    return;
+
+                // Check cache first to avoid redundant modifications
+                if (_capitalNameCache.TryGetValue(__instance.StringId, out TextObject cachedName))
+                {
+                    __result = cachedName;
+                    return;
                 }
+
+                // Get the original name text
+                string originalName = __result.ToString();
+
+                // Skip if name is empty or already contains color tags
+                if (string.IsNullOrEmpty(originalName) || originalName.Contains("<color="))
+                    return;
+
+                // Create new TextObject with golden color markup
+                // Format: <color=#cbae79>Settlement Name</color>
+                string goldColoredName = $"<color=#cbae79>{originalName}</color>";
+                TextObject coloredTextObject = new TextObject(goldColoredName);
+
+                // Cache the modified name
+                _capitalNameCache[__instance.StringId] = coloredTextObject;
+
+                // Return the colored name
+                __result = coloredTextObject;
+
+                ModLogger.Log($"Applied golden color markup to capital name: {originalName}");
             }
             catch (Exception ex)
             {
-                ModLogger.Error("Error in UpdateTargetSettlement_Postfix", ex);
+                // Suppress errors to avoid log spam and game crashes
+                // Only log critical errors
+                ModLogger.Error("Error in SettlementNameColorPatch", ex);
             }
         }
 
         /// <summary>
-        /// Alternative patch for GetSettlementColor private method.
-        /// This provides a fallback in case the primary patch doesn't work.
-        /// Directly overrides the color calculation for capital settlements.
+        /// Clears the capital name cache.
+        /// Call this when capitals change or when starting a new game.
         /// </summary>
-        [HarmonyPatch("GetSettlementColor")]
-        [HarmonyPostfix]
-        public static void GetSettlementColor_Postfix(MapInfoVM __instance, Settlement settlement, ref Color __result)
+        public static void ClearCache()
         {
-            try
-            {
-                // Override color for capitals
-                if (settlement != null && CapitalManager.IsCapital(settlement))
-                {
-                    __result = GoldColor;
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error("Error in GetSettlementColor_Postfix", ex);
-            }
+            _capitalNameCache.Clear();
+            ModLogger.Log("Capital name cache cleared");
         }
     }
 }
