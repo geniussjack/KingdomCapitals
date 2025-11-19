@@ -14,6 +14,7 @@
     <Deterministic>true</Deterministic>
     <LangVersion>9.0</LangVersion>
     <GameFolder>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
+    <ModulesFolder>$(GameFolder)\Modules</ModulesFolder>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -25,7 +26,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>$(GameFolder)\Modules\KingdomCapitals\bin\Win64_Shipping_Client\</OutputPath>
+    <OutputPath>$(ModulesFolder)\KingdomCapitals\bin\Win64_Shipping_Client\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -114,4 +115,43 @@
     <Compile Include="Patches\CapitalOwnershipPatch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <!-- Copy SubModule.xml and ModuleData to output -->
+  <Target Name="CopyModuleFiles" AfterTargets="Build">
+    <!-- Debug: Copy to project bin folder -->
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+      <ModuleOutputPath>bin\</ModuleOutputPath>
+    </PropertyGroup>
+
+    <!-- Release: Copy to game modules folder -->
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+      <ModuleOutputPath>$(ModulesFolder)\KingdomCapitals\</ModuleOutputPath>
+    </PropertyGroup>
+
+    <!-- Copy SubModule.xml -->
+    <Copy SourceFiles="SubModule.xml" DestinationFiles="$(ModuleOutputPath)SubModule.xml" SkipUnchangedFiles="true" />
+
+    <!-- Copy entire ModuleData folder -->
+    <ItemGroup>
+      <ModuleDataFiles Include="ModuleData\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ModuleDataFiles)" DestinationFiles="@(ModuleDataFiles->'$(ModuleOutputPath)ModuleData\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+
+    <Message Text="[$(Configuration)] Copied SubModule.xml and ModuleData to: $(ModuleOutputPath)" Importance="high" />
+  </Target>
+
+  <!-- Clean unnecessary files -->
+  <Target Name="CleanOutputFiles" AfterTargets="Build">
+    <ItemGroup>
+      <FilesToDelete Include="$(OutputPath)*.deps.json" />
+      <FilesToDelete Include="$(OutputPath)*.runtimeconfig.json" />
+      <FilesToDelete Include="$(OutputPath)*.pdb" Condition="'$(Configuration)'=='Release'" />
+      <FilesToDelete Include="$(OutputPath)MCMv5.dll" />
+      <FilesToDelete Include="$(OutputPath)0Harmony.dll" />
+      <FilesToDelete Include="$(OutputPath)TaleWorlds.*.dll" />
+      <FilesToDelete Include="$(OutputPath)SandBox*.dll" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+    <Message Text="Cleaned unnecessary files from output (game DLLs should come from game installation)" Importance="high" />
+  </Target>
 </Project>
