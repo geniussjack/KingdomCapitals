@@ -29,14 +29,33 @@ namespace KingdomCapitals.Core
             {
                 // Initialize Harmony patches
                 _harmony = new Harmony(ModConstants.HarmonyId);
+
+                ModLogger.Log("Starting Harmony patch process...");
+
+                // Apply all patches
                 _harmony.PatchAll();
 
+                // Log all patched methods
+                var patchedMethods = _harmony.GetPatchedMethods();
+                int patchCount = 0;
+                foreach (var method in patchedMethods)
+                {
+                    patchCount++;
+                    ModLogger.Log($"Patched method: {method.DeclaringType?.FullName}.{method.Name}");
+                }
+
+                ModLogger.Log($"Total methods patched: {patchCount}");
                 ModLogger.Log(Messages.Mod.LoadedSuccessfully);
                 ModLogger.Log(string.Format(Messages.Log.HarmonyPatchesAppliedFormat, ModConstants.HarmonyId));
             }
             catch (Exception ex)
             {
                 ModLogger.Error(Messages.Errors.FailedToLoad, ex);
+                // Log inner exception details if available
+                if (ex.InnerException != null)
+                {
+                    ModLogger.Error("Inner exception:", ex.InnerException);
+                }
             }
         }
 
