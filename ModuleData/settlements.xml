@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Settlements>
   <!--
-    Kingdom Capitals Building Extensions
-    Extends all major buildings in capital cities to level 5.
+    Kingdom Capitals Building Extensions - Detailed Progression Data
 
-    Progression Pattern:
-    - Levels 4 and 5 follow the same progression as levels 1-3
-    - Example: If levels are 0%, 10%, 15%, then 4=20%, 5=25%
-    - Construction cost and time increase proportionally
+    Methodology:
+    - Cost L4 = L3 × 1.5
+    - Cost L5 = L4 × 1.5
+    - Time L4 = L3 + 2 days
+    - Time L5 = L4 + 2 days
+    - Effects = linear continuation of L1-L3 progression
 
     Capital Cities:
     - Battania: Marunath (town_b2)
@@ -20,288 +21,1348 @@
     - Southern Empire: Lycaron (town_es2)
   -->
 
-  <!-- BATTANIA CAPITAL: Marunath (town_b2) -->
+  <!-- ========================================
+       BATTANIA CAPITAL: Marunath (town_b2)
+       ======================================== -->
   <Settlement id="town_b2">
     <Buildings>
-      <!-- Granary Extension -->
+
+      <!-- Granary: Food storage capacity -->
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
 
-      <!-- Forum Extension (Prosperity bonus) -->
+      <!-- Forum: Prosperity and loyalty -->
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
 
-      <!-- Marketplace Extension (Tax income) -->
+      <!-- Marketplace: Trade and tax income -->
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
 
-      <!-- Garrison Barracks Extension (Garrison capacity) -->
+      <!-- Garrison Barracks: Military capacity -->
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
 
-      <!-- Training Fields Extension (XP bonus) -->
+      <!-- Training Fields: Troop experience -->
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
 
-      <!-- Siege Workshop Extension (Production) -->
+      <!-- Siege Workshop: Production -->
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
 
-      <!-- Fairgrounds Extension (Food variety) -->
+      <!-- Fairgrounds: Food variety and morale -->
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <!-- City Walls: Defense -->
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
 
-  <!-- VLANDIA CAPITAL: Galend (town_v1) -->
+  <!-- ========================================
+       VLANDIA CAPITAL: Galend (town_v1)
+       ======================================== -->
   <Settlement id="town_v1">
     <Buildings>
+
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
 
-  <!-- ASERAI CAPITAL: Quyaz (town_a8) -->
+  <!-- ========================================
+       ASERAI CAPITAL: Quyaz (town_a8)
+       ======================================== -->
   <Settlement id="town_a8">
     <Buildings>
+
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
 
-  <!-- STURGIA CAPITAL: Balgard (town_s2) -->
+  <!-- ========================================
+       STURGIA CAPITAL: Balgard (town_s2)
+       ======================================== -->
   <Settlement id="town_s2">
     <Buildings>
+
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
 
-  <!-- KHUZAIT CAPITAL: Makeb (town_k4) -->
+  <!-- ========================================
+       KHUZAIT CAPITAL: Makeb (town_k4)
+       ======================================== -->
   <Settlement id="town_k4">
     <Buildings>
+
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
 
-  <!-- WESTERN EMPIRE CAPITAL: Jalmarys (town_es3) -->
+  <!-- ========================================
+       WESTERN EMPIRE CAPITAL: Jalmarys (town_es3)
+       ======================================== -->
   <Settlement id="town_es3">
     <Buildings>
+
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
 
-  <!-- NORTHERN EMPIRE CAPITAL: Diathma (town_en2) -->
+  <!-- ========================================
+       NORTHERN EMPIRE CAPITAL: Diathma (town_en2)
+       ======================================== -->
   <Settlement id="town_en2">
     <Buildings>
+
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
 
-  <!-- SOUTHERN EMPIRE CAPITAL: Lycaron (town_es2) -->
+  <!-- ========================================
+       SOUTHERN EMPIRE CAPITAL: Lycaron (town_es2)
+       ======================================== -->
   <Settlement id="town_es2">
     <Buildings>
+
       <Building id="building_settlement_granary">
-        <BuildingType id="building_settlement_granary" level="4" />
-        <BuildingType id="building_settlement_granary" level="5" />
+        <BuildingType id="building_settlement_granary" level="4">
+          <Effects>
+            <Effect type="FoodStocks" value="800" />
+            <Effect type="Prosperity" value="50" />
+          </Effects>
+          <Cost value="11000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_granary" level="5">
+          <Effects>
+            <Effect type="FoodStocks" value="1000" />
+            <Effect type="Prosperity" value="75" />
+          </Effects>
+          <Cost value="16500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_forum">
-        <BuildingType id="building_settlement_forum" level="4" />
-        <BuildingType id="building_settlement_forum" level="5" />
+        <BuildingType id="building_settlement_forum" level="4">
+          <Effects>
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Loyalty" value="1.5" />
+          </Effects>
+          <Cost value="14000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_forum" level="5">
+          <Effects>
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Loyalty" value="2.0" />
+          </Effects>
+          <Cost value="21000" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_marketplace">
-        <BuildingType id="building_settlement_marketplace" level="4" />
-        <BuildingType id="building_settlement_marketplace" level="5" />
+        <BuildingType id="building_settlement_marketplace" level="4">
+          <Effects>
+            <Effect type="TradePower" value="0.25" />
+            <Effect type="Prosperity" value="200" />
+            <Effect type="Tax" value="50" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
+        <BuildingType id="building_settlement_marketplace" level="5">
+          <Effects>
+            <Effect type="TradePower" value="0.30" />
+            <Effect type="Prosperity" value="250" />
+            <Effect type="Tax" value="75" />
+          </Effects>
+          <Cost value="22500" />
+          <ConstructionTime value="17" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_garrison_barracks">
-        <BuildingType id="building_settlement_garrison_barracks" level="4" />
-        <BuildingType id="building_settlement_garrison_barracks" level="5" />
+        <BuildingType id="building_settlement_garrison_barracks" level="4">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="100" />
+            <Effect type="Militia" value="20" />
+            <Effect type="GarrisonWageReduce" value="0.10" />
+          </Effects>
+          <Cost value="12000" />
+          <ConstructionTime value="13" />
+        </BuildingType>
+        <BuildingType id="building_settlement_garrison_barracks" level="5">
+          <Effects>
+            <Effect type="GarrisonCapacity" value="150" />
+            <Effect type="Militia" value="25" />
+            <Effect type="GarrisonWageReduce" value="0.15" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="15" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_training_fields">
-        <BuildingType id="building_settlement_training_fields" level="4" />
-        <BuildingType id="building_settlement_training_fields" level="5" />
+        <BuildingType id="building_settlement_training_fields" level="4">
+          <Effects>
+            <Effect type="TroopExperience" value="30" />
+            <Effect type="GarrisonCapacity" value="50" />
+          </Effects>
+          <Cost value="13000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
+        <BuildingType id="building_settlement_training_fields" level="5">
+          <Effects>
+            <Effect type="TroopExperience" value="40" />
+            <Effect type="GarrisonCapacity" value="75" />
+          </Effects>
+          <Cost value="19500" />
+          <ConstructionTime value="16" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_siege_workshop">
-        <BuildingType id="building_settlement_siege_workshop" level="4" />
-        <BuildingType id="building_settlement_siege_workshop" level="5" />
+        <BuildingType id="building_settlement_siege_workshop" level="4">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.20" />
+            <Effect type="SiegePreparation" value="10" />
+          </Effects>
+          <Cost value="16000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_settlement_siege_workshop" level="5">
+          <Effects>
+            <Effect type="ProductionEfficiency" value="0.25" />
+            <Effect type="SiegePreparation" value="15" />
+          </Effects>
+          <Cost value="24000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
       </Building>
+
       <Building id="building_settlement_fairgrounds">
-        <BuildingType id="building_settlement_fairgrounds" level="4" />
-        <BuildingType id="building_settlement_fairgrounds" level="5" />
+        <BuildingType id="building_settlement_fairgrounds" level="4">
+          <Effects>
+            <Effect type="FoodVariety" value="4" />
+            <Effect type="Loyalty" value="1.0" />
+            <Effect type="Prosperity" value="100" />
+          </Effects>
+          <Cost value="10000" />
+          <ConstructionTime value="12" />
+        </BuildingType>
+        <BuildingType id="building_settlement_fairgrounds" level="5">
+          <Effects>
+            <Effect type="FoodVariety" value="5" />
+            <Effect type="Loyalty" value="1.5" />
+            <Effect type="Prosperity" value="150" />
+          </Effects>
+          <Cost value="15000" />
+          <ConstructionTime value="14" />
+        </BuildingType>
       </Building>
+
+      <Building id="building_wall">
+        <BuildingType id="building_wall" level="4">
+          <Effects>
+            <Effect type="WallLevel" value="200" />
+            <Effect type="MilitiaBonus" value="10" />
+          </Effects>
+          <Cost value="18000" />
+          <ConstructionTime value="16" />
+        </BuildingType>
+        <BuildingType id="building_wall" level="5">
+          <Effects>
+            <Effect type="WallLevel" value="250" />
+            <Effect type="MilitiaBonus" value="15" />
+          </Effects>
+          <Cost value="27000" />
+          <ConstructionTime value="18" />
+        </BuildingType>
+      </Building>
+
     </Buildings>
   </Settlement>
+
 </Settlements>
