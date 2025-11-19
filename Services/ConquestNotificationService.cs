@@ -21,13 +21,13 @@ namespace KingdomCapitals.Services
             Kingdom conquererKingdom, Hero capturerHero)
         {
             // General conquest message
-            string message = string.Format(Messages.Conquest.KingdomFallenFormat, capital.Name, defeatedKingdom.Name);
+            string message = string.Format(Messages.Conquest.KingdomFallenFormat, capital.Name.ToString(), defeatedKingdom.Name.ToString());
             InformationManager.DisplayMessage(new InformationMessage(message, UIConstants.MessageColors.Error));
 
             // Player-specific message if they were the capturer
             if (capturerHero == Hero.MainHero)
             {
-                string playerMessage = string.Format(Messages.Conquest.PlayerConqueredKingdomFormat, defeatedKingdom.Name);
+                string playerMessage = string.Format(Messages.Conquest.PlayerConqueredKingdomFormat, defeatedKingdom.Name.ToString());
                 InformationManager.DisplayMessage(new InformationMessage(playerMessage, UIConstants.MessageColors.Success));
             }
         }
@@ -41,7 +41,7 @@ namespace KingdomCapitals.Services
         public static void NotifyPlayerCapitalWithoutKingdom(Settlement capital, Kingdom defeatedKingdom, Hero playerHero)
         {
             string message = string.Format(Messages.Conquest.PlayerCapturedCapitalWithoutKingdomFormat,
-                capital.Name, defeatedKingdom.Name);
+                capital.Name.ToString(), defeatedKingdom.Name.ToString());
             InformationManager.DisplayMessage(new InformationMessage(message, UIConstants.MessageColors.Success));
         }
 
@@ -51,7 +51,7 @@ namespace KingdomCapitals.Services
         /// <param name="capital">The capital that was captured.</param>
         public static void NotifyFoundKingdom(Settlement capital)
         {
-            string message = string.Format(Messages.Conquest.PlayerCapturedCapitalFoundKingdomFormat, capital.Name);
+            string message = string.Format(Messages.Conquest.PlayerCapturedCapitalFoundKingdomFormat, capital.Name.ToString());
             InformationManager.DisplayMessage(new InformationMessage(message, UIConstants.MessageColors.Success));
         }
     }

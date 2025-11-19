@@ -26,7 +26,7 @@ namespace KingdomCapitals.Services
             {
                 if (conquererKingdom?.RulingClan == null)
                 {
-                    ModLogger.Error(string.Format(Messages.Errors.TransferToRulingClanNullRulingClan, capital?.Name ?? "Unknown"));
+                    ModLogger.Error(string.Format(Messages.Errors.TransferToRulingClanNullRulingClan, capital?.Name?.ToString() ?? "Unknown"));
                     return false;
                 }
 
@@ -35,12 +35,12 @@ namespace KingdomCapitals.Services
                 // Force transfer to ruling clan
                 ChangeOwnerOfSettlementAction.ApplyByDefault(rulingClanLeader, capital);
 
-                ModLogger.Log(string.Format(Messages.Log.CapitalTransferredToRulingClanFormat, capital.Name, conquererKingdom.RulingClan.Name));
+                ModLogger.Log(string.Format(Messages.Log.CapitalTransferredToRulingClanFormat, capital.Name.ToString(), conquererKingdom.RulingClan.Name.ToString()));
                 return true;
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Error transferring capital {capital?.Name} to ruling clan", ex);
+                ModLogger.Error($"Error transferring capital {capital?.Name?.ToString() ?? "Unknown"} to ruling clan", ex);
                 return false;
             }
         }
@@ -65,7 +65,7 @@ namespace KingdomCapitals.Services
                         // Transfer to conquerer's ruling clan
                         ChangeOwnerOfSettlementAction.ApplyByDefault(conquererKingdom.RulingClan.Leader, settlement);
                         ModLogger.Log(string.Format(Messages.Log.TransferredSettlementFormat,
-                            settlement.Name, defeatedKingdom.Name, conquererKingdom.Name));
+                            settlement.Name.ToString(), defeatedKingdom.Name.ToString(), conquererKingdom.Name.ToString()));
                         transferredCount++;
                     }
                 }
@@ -74,7 +74,7 @@ namespace KingdomCapitals.Services
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Error transferring settlements from {defeatedKingdom?.Name}", ex);
+                ModLogger.Error($"Error transferring settlements from {defeatedKingdom?.Name?.ToString() ?? "Unknown"}", ex);
                 return 0;
             }
         }
@@ -96,12 +96,12 @@ namespace KingdomCapitals.Services
             try
             {
                 ChangeOwnerOfSettlementAction.ApplyByDefault(newOwner, settlement);
-                ModLogger.Log(string.Format(Messages.Log.TransferredCapitalFormat, settlement.Name, newOwner.Name));
+                ModLogger.Log(string.Format(Messages.Log.TransferredCapitalFormat, settlement.Name.ToString(), newOwner.Name.ToString()));
                 return true;
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Failed to transfer settlement: {settlement.Name}", ex);
+                ModLogger.Error($"Failed to transfer settlement: {settlement.Name.ToString()}", ex);
                 return false;
             }
         }

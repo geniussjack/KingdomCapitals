@@ -31,7 +31,7 @@ namespace KingdomCapitals.Services
                     {
                         // Make clan join conquerer kingdom as vassal
                         ChangeKingdomAction.ApplyByJoinToKingdom(clan, conquererKingdom, false);
-                        ModLogger.Log(string.Format(Messages.Log.VassalizedClanFormat, clan.Name, conquererKingdom.Name));
+                        ModLogger.Log(string.Format(Messages.Log.VassalizedClanFormat, clan.Name.ToString(), conquererKingdom.Name.ToString()));
                         vassalizedCount++;
                     }
                 }
@@ -40,7 +40,7 @@ namespace KingdomCapitals.Services
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Error vassalizing clans from {defeatedKingdom?.Name}", ex);
+                ModLogger.Error($"Error vassalizing clans from {defeatedKingdom?.Name?.ToString() ?? "Unknown"}", ex);
                 return 0;
             }
         }
@@ -58,12 +58,12 @@ namespace KingdomCapitals.Services
                     return false;
 
                 DestroyKingdomAction.Apply(kingdom);
-                ModLogger.Log(string.Format(Messages.Log.KingdomDestroyedFormat, kingdom.Name));
+                ModLogger.Log(string.Format(Messages.Log.KingdomDestroyedFormat, kingdom.Name.ToString()));
                 return true;
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Error destroying kingdom {kingdom?.Name}", ex);
+                ModLogger.Error($"Error destroying kingdom {kingdom?.Name?.ToString() ?? "Unknown"}", ex);
                 return false;
             }
         }
