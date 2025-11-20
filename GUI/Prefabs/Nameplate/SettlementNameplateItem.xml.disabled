@@ -16,16 +16,13 @@
                 SuggestedWidth="24" SuggestedHeight="24"
                 HorizontalAlignment="Center" VerticalAlignment="Top"
                 PositionYOffset="-30"
-                IsVisible="@IsCapital"
-                Brush.AlphaFactor="1.0">
+                IsVisible="@IsCapital">
           <Children>
-            <!-- Actual crown sprite image -->
+            <!-- Actual crown sprite image - using game's built-in sprite without color modifications -->
             <ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
                          SuggestedWidth="24" SuggestedHeight="24"
                          HorizontalAlignment="Center" VerticalAlignment="Center"
-                         Sprite="SPScoreboard\leader_crown_icon"
-                         Brush.Color="#FFD700"
-                         Brush.ColorFactor="1.0" />
+                         Sprite="SPScoreboard\leader_crown_icon" />
           </Children>
         </Widget>
       </Children>
