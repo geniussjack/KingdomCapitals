@@ -7,6 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Localization;
 
 namespace KingdomCapitals.Patches
 {
@@ -114,7 +115,7 @@ namespace KingdomCapitals.Patches
                 float originalWage = __result.ResultNumber;
 
                 // Add explanation and set result to 0
-                __result.Add("Capital Garrison (Free)", -originalWage);
+                __result.Add(-originalWage, new TextObject("Capital Garrison (Free)"));
 
                 if (ModSettings.Instance?.EnableDebugLogging == true && originalWage > 0)
                 {
