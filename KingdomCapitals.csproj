@@ -83,6 +83,15 @@
       <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.DotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <!-- Gauntlet UI -->
+    <Reference Include="TaleWorlds.GauntletUI">
+      <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.GauntletUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.Engine.GauntletUI">
+      <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.Engine.GauntletUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <!-- Bannerlord Campaign -->
     <Reference Include="TaleWorlds.CampaignSystem">
       <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.CampaignSystem.dll</HintPath>
@@ -135,6 +144,7 @@
     <Compile Include="Patches\SettlementNameTooltipPatch.cs" />
     <Compile Include="Patches\CapitalOwnershipPatch.cs" />
     <Compile Include="Patches\SettlementNameplatesVMPatch.cs" />
+    <Compile Include="Patches\SettlementNameplateViewPatch.cs" />
     <!-- ViewModels -->
     <Compile Include="ViewModels\CapitalSettlementNameplateVM.cs" />
   </ItemGroup>
