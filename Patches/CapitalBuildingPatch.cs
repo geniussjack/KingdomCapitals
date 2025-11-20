@@ -1,5 +1,6 @@
 using HarmonyLib;
 using KingdomCapitals.Core;
+using KingdomCapitals.Models;
 using KingdomCapitals.Utils;
 using System;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -31,12 +32,12 @@ namespace KingdomCapitals.Patches
             try
             {
                 // Check if this building is in a capital
-                if (__instance?.BuildingType?.Settlement == null)
+                if (__instance?.Town?.Settlement == null)
                 {
                     return;
                 }
 
-                Settlement settlement = __instance.BuildingType.Settlement;
+                Settlement settlement = __instance.Town.Settlement;
 
                 if (!CapitalManager.IsCapital(settlement))
                 {
