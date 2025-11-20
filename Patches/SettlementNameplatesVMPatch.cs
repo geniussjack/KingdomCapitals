@@ -25,40 +25,16 @@ namespace KingdomCapitals.Patches
         }
 
         /// <summary>
-        /// Postfix patch - replaces Nameplates collection with our interceptor.
+        /// Postfix patch - DISABLED.
+        /// Cannot extract private fields (_targetEntity, _camera) needed for CapitalSettlementNameplateVM constructor.
+        /// Using alternative approach: programmatic widget injection in View layer.
         /// </summary>
         static void Postfix(SettlementNameplatesVM __instance)
         {
-            try
-            {
-                if (__instance == null)
-                {
-                    ModLogger.Log("SettlementNameplatesVM instance is null");
-                    return;
-                }
-
-                // Create interceptor and copy existing nameplates to preserve them
-                var interceptor = new CapitalNameplateInterceptor();
-
-                // Copy existing nameplates if any
-                if (__instance.Nameplates != null && __instance.Nameplates.Count > 0)
-                {
-                    ModLogger.Log($"Copying {__instance.Nameplates.Count} existing nameplates to interceptor");
-                    foreach (var nameplate in __instance.Nameplates)
-                    {
-                        interceptor.Add(nameplate);
-                    }
-                }
-
-                // Replace the collection with our interceptor
-                __instance.Nameplates = interceptor;
-
-                ModLogger.Log("Successfully injected CapitalNameplateInterceptor");
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error("Error in SettlementNameplatesVMPatch", ex);
-            }
+            // DISABLED: Field extraction fails because fields are null or have different names
+            // Even when extraction succeeds, replacing Nameplates breaks UI rendering
+            ModLogger.Log("SettlementNameplatesVMPatch.Postfix: DISABLED (using View layer widget injection)");
+            return;
         }
     }
 
