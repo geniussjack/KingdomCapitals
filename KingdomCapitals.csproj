@@ -126,10 +126,6 @@
     <!-- Patches -->
     <Compile Include="Patches\SettlementNameTooltipPatch.cs" />
     <Compile Include="Patches\CapitalOwnershipPatch.cs" />
-    <Compile Include="Patches\SettlementNameplatesVMPatch.cs" />
-    <!-- ViewModels -->
-    <Compile Include="ViewModels\CapitalSettlementNameplateVM.cs" />
-    <Compile Include="ViewModels\CapitalNameplateListInterceptor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
@@ -156,12 +152,7 @@
       <ModuleDataFiles Include="ModuleData\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(ModuleDataFiles)" DestinationFiles="@(ModuleDataFiles->'$(ModuleOutputPath)ModuleData\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <!-- Copy entire GUI folder -->
-    <ItemGroup>
-      <GUIFiles Include="GUI\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(GUIFiles)" DestinationFiles="@(GUIFiles->'$(ModuleOutputPath)GUI\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Message Text="[$(Configuration)] Copied SubModule.xml, ModuleData, and GUI to: $(ModuleOutputPath)" Importance="high" />
+    <Message Text="[$(Configuration)] Copied SubModule.xml and ModuleData to: $(ModuleOutputPath)" Importance="high" />
   </Target>
   <!-- Clean unnecessary files -->
   <Target Name="CleanOutputFiles" AfterTargets="Build">
