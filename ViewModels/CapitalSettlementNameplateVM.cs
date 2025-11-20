@@ -40,7 +40,7 @@ namespace KingdomCapitals.ViewModels
             Settlement settlement,
             GameEntity targetEntity,
             Camera camera,
-            Action<Vec2, float> fastMoveCameraToPosition)
+            Action<Vec2> fastMoveCameraToPosition)
             : base(settlement, targetEntity, camera, fastMoveCameraToPosition)
         {
             // Check capital status

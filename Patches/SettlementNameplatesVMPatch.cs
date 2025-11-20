@@ -15,7 +15,7 @@ namespace KingdomCapitals.Patches
     /// </summary>
     [HarmonyPatch(typeof(SettlementNameplatesVM))]
     [HarmonyPatch(MethodType.Constructor)]
-    [HarmonyPatch(new Type[] { typeof(Camera), typeof(Action<Vec2, float>) })]
+    [HarmonyPatch(new Type[] { typeof(Camera), typeof(Action<Vec2>) })]
     public static class SettlementNameplatesVMPatch
     {
         static bool Prepare()
@@ -71,7 +71,7 @@ namespace KingdomCapitals.Patches
                 Settlement settlement = item.Settlement;  // Public property
                 GameEntity targetEntity = traverse.Field("_targetEntity").GetValue<GameEntity>();
                 Camera camera = traverse.Field("_camera").GetValue<Camera>();
-                Action<Vec2, float> fastMoveCameraToPosition = traverse.Field("_fastMoveCameraToPosition").GetValue<Action<Vec2, float>>();
+                Action<Vec2> fastMoveCameraToPosition = traverse.Field("_fastMoveCameraToPosition").GetValue<Action<Vec2>>();
 
                 // Create our custom ViewModel if we successfully extracted all fields
                 if (settlement != null && targetEntity != null && camera != null && fastMoveCameraToPosition != null)
@@ -84,13 +84,14 @@ namespace KingdomCapitals.Patches
                     );
 
                     base.InsertItem(index, customVM);
-                    ModLogger.Log($"Replaced nameplate for: {settlement.Name} (IsCapital: {customVM.IsCapital})");
+                    ModLogger.Log($"Replaced nameplate for: {settlement.Name.ToString()} (IsCapital: {customVM.IsCapital})");
                 }
                 else
                 {
                     // Fallback to original if extraction failed
                     base.InsertItem(index, item);
-                    ModLogger.Log($"Using original nameplate for: {settlement?.Name ?? "unknown"}");
+                    string settlementName = settlement != null ? settlement.Name.ToString() : "unknown";
+                    ModLogger.Log($"Using original nameplate for: {settlementName}");
                 }
             }
             catch (Exception ex)
