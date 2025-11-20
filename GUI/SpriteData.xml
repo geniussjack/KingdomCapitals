@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SpriteData>
+  <!--
+    Kingdom Capitals Sprite Data
+    Defines the crown icon sprite for capital settlement nameplates.
+  -->
+
+  <!-- Sprite Category for Kingdom Capitals UI elements -->
+  <SpriteCategory Name="ui_kingdomcapitals">
+    <!--
+      Crown icon sprite for capital cities
+      Size: 20x20 pixels (standard), 40x40 pixels (@2x for high-DPI)
+      Used in settlement nameplates to indicate capitals
+    -->
+    <SpritePart Name="capital_crown_icon">
+      <Width>20</Width>
+      <Height>20</Height>
+    </SpritePart>
+
+    <!-- High-DPI version (@2x) -->
+    <SpritePart Name="capital_crown_icon@2x">
+      <Width>40</Width>
+      <Height>40</Height>
+    </SpritePart>
+  </SpriteCategory>
+
+  <!--
+    Alternative: Using game's built-in crown sprite
+    You can reference this in your code instead of custom sprite:
+    Sprite="SPScoreboard\leader_crown_icon"
+  -->
+
+</SpriteData>

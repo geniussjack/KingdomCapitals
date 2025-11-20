@@ -30,9 +30,9 @@ namespace KingdomCapitals.Patches
         /// </summary>
         static bool Prepare()
         {
-            // RE-ENABLED: Using simple text marker approach
-            ModLogger.Log("SettlementNameColorPatch ENABLED: Will add [★] marker to capital names");
-            return true;
+            // DISABLED: Using ViewModel + Sprite approach instead
+            ModLogger.Log("SettlementNameColorPatch DISABLED: Using ViewModel + Sprite system for crown display");
+            return false;
         }
 
         /// <summary>
