@@ -16,8 +16,6 @@ namespace KingdomCapitals.Patches
     [HarmonyPatch(typeof(MobileParty), "TotalWage", MethodType.Getter)]
     public static class CapitalGarrisonWagePatch
     {
-        private static ModSettings Settings => ModSettings.Instance;
-
         private static bool Prepare()
         {
             // Always enable this patch as it's core functionality
@@ -59,7 +57,7 @@ namespace KingdomCapitals.Patches
                 // Set wage to 0 for capital garrisons
                 __result = 0;
 
-                if (Settings?.EnableDebugLogging == true && originalWage > 0)
+                if (ModSettings.Instance?.EnableDebugLogging == true && originalWage > 0)
                 {
                     ModLogger.Log($"Capital {settlement.Name}: Garrison wage reduced from {originalWage} to 0 (FREE)");
                 }
@@ -78,8 +76,6 @@ namespace KingdomCapitals.Patches
     [HarmonyPatch(typeof(DefaultPartyWageModel), "GetTotalWage")]
     public static class DefaultPartyWageModel_GetTotalWage_Patch
     {
-        private static ModSettings Settings => ModSettings.Instance;
-
         private static bool Prepare()
         {
             ModLogger.Log("DefaultPartyWageModel_GetTotalWage_Patch: ENABLED - Backup patch for capital garrison wages");
@@ -117,7 +113,7 @@ namespace KingdomCapitals.Patches
                 int originalWage = __result;
                 __result = 0;
 
-                if (Settings?.EnableDebugLogging == true && originalWage > 0)
+                if (ModSettings.Instance?.EnableDebugLogging == true && originalWage > 0)
                 {
                     ModLogger.Log($"[PartyWageModel] Capital {settlement.Name}: Garrison wage reduced from {originalWage} to 0 (FREE)");
                 }
