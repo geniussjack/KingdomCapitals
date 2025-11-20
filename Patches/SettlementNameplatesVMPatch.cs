@@ -22,8 +22,8 @@ namespace KingdomCapitals.Patches
     {
         private static bool Prepare()
         {
-            ModLogger.Log("SettlementNameplatesVMPatch: Preparing to inject capital nameplate system");
-            return true;
+            ModLogger.Log("SettlementNameplatesVMPatch DISABLED: Focusing on core mod logic instead of UI");
+            return false; // DISABLED - focusing on core gameplay mechanics
         }
 
         /// <summary>
