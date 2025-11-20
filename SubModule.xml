@@ -36,12 +36,5 @@
         <GameType value="CampaignStoryMode"/>
       </IncludedGameTypes>
     </XmlNode>
-    <XmlNode>
-      <XmlName id="SpriteData" path="SpriteData"/>
-      <IncludedGameTypes>
-        <GameType value="Campaign"/>
-        <GameType value="CampaignStoryMode"/>
-      </IncludedGameTypes>
-    </XmlNode>
   </Xmls>
 </Module>
