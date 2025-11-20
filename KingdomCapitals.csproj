@@ -150,26 +150,20 @@
     <Compile Include="Utils\CapitalData.cs" />
     <Compile Include="Utils\ModLogger.cs" />
     <!-- Patches -->
-    <Compile Include="Patches\SettlementNameTooltipPatch.cs" />
     <Compile Include="Patches\CapitalOwnershipPatch.cs" />
-    <Compile Include="Patches\SettlementNameplatesVMPatch.cs" />
-    <Compile Include="Patches\SettlementNameplateViewPatch.cs" />
-    <!-- ViewModels -->
-    <Compile Include="ViewModels\CapitalSettlementNameplateVM.cs" />
+    <Compile Include="Patches\CapitalBuildingPatch.cs" />
+    <Compile Include="Patches\CapitalGarrisonWagePatch.cs" />
+    <Compile Include="Patches\DisableVanillaGarrisonForCapitals_Patch.cs" />
+    <Compile Include="Patches\CapitalDailyProjectsPatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="GUI\Prefabs\Nameplate\SettlementNameplateItem.xml" />
-    <Content Include="GUI\SpriteData.xml" />
-    <Content Include="GUI\SpriteParts\ui_kingdomcapitals\capital_crown_icon%402x.png" />
-    <Content Include="GUI\SpriteParts\ui_kingdomcapitals\capital_crown_icon.png" />
     <Content Include="ModuleData\Languages\EN\language_data.xml" />
     <Content Include="ModuleData\Languages\EN\strings.xml" />
     <Content Include="ModuleData\settlements.xml" />
     <Content Include="SubModule.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GUI\SpriteParts\ui_kingdomcapitals\README.md" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -190,12 +184,7 @@
       <ModuleDataFiles Include="ModuleData\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(ModuleDataFiles)" DestinationFiles="@(ModuleDataFiles->'$(ModuleOutputPath)ModuleData\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <!-- Copy entire GUI folder (sprites and UI prefabs) -->
-    <ItemGroup>
-      <GUIFiles Include="GUI\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(GUIFiles)" DestinationFiles="@(GUIFiles->'$(ModuleOutputPath)GUI\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" Condition="Exists('GUI')" />
-    <Message Text="[$(Configuration)] Copied SubModule.xml, ModuleData, and GUI to: $(ModuleOutputPath)" Importance="high" />
+    <Message Text="[$(Configuration)] Copied SubModule.xml and ModuleData to: $(ModuleOutputPath)" Importance="high" />
   </Target>
   <!-- Clean unnecessary files -->
   <Target Name="CleanOutputFiles" AfterTargets="Build">
