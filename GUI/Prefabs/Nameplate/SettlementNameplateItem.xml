@@ -3,7 +3,7 @@
   <!--
     Kingdom Capitals - Settlement Nameplate Crown Icon
     Adds crown icon above capital city names on campaign map.
-    Uses built-in game sprite: SPScoreboard\leader_crown_icon
+    Uses custom sprite: ui_kingdomcapitals\capital_crown_icon
   -->
 
   <Window>
@@ -13,19 +13,16 @@
       <Children>
         <!-- Crown icon positioned above settlement name -->
         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-                SuggestedWidth="24" SuggestedHeight="24"
+                SuggestedWidth="20" SuggestedHeight="20"
                 HorizontalAlignment="Center" VerticalAlignment="Top"
-                PositionYOffset="-30"
-                IsVisible="@IsCapital"
-                Brush.AlphaFactor="1.0">
+                PositionYOffset="-28"
+                IsVisible="@IsCapital">
           <Children>
             <!-- Actual crown sprite image -->
             <ImageWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed"
-                         SuggestedWidth="24" SuggestedHeight="24"
+                         SuggestedWidth="20" SuggestedHeight="20"
                          HorizontalAlignment="Center" VerticalAlignment="Center"
-                         Sprite="SPScoreboard\leader_crown_icon"
-                         Brush.Color="#FFD700"
-                         Brush.ColorFactor="1.0" />
+                         Sprite="ui_kingdomcapitals\capital_crown_icon" />
           </Children>
         </Widget>
       </Children>
