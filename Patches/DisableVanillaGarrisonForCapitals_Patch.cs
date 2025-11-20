@@ -1,0 +1,57 @@
+using HarmonyLib;
+using KingdomCapitals.Core;
+using KingdomCapitals.Utils;
+using System;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Settlements;
+
+namespace KingdomCapitals.Patches
+{
+    /// <summary>
+    /// Disables vanilla automatic garrison recruitment (+1 troop per day) for capitals.
+    /// Allows our custom CapitalGarrisonBehavior to be the ONLY source of garrison growth.
+    /// </summary>
+    [HarmonyPatch(typeof(DefaultSettlementGarrisonModel), "TickAutoRecruitmentGarrisonChange")]
+    public static class DisableVanillaGarrisonForCapitals_Patch
+    {
+        private static bool Prepare()
+        {
+            ModLogger.Log("DisableVanillaGarrisonForCapitals_Patch: ENABLED - Vanilla garrison growth disabled for capitals");
+            return true;
+        }
+
+        /// <summary>
+        /// Prefix patch - prevents vanilla garrison recruitment for capitals.
+        /// Returns false to skip vanilla method execution for capitals.
+        /// </summary>
+        /// <param name="settlement">The settlement being processed.</param>
+        /// <param name="__result">The number of troops to add (will be set to 0 for capitals).</param>
+        /// <returns>False if capital (skip vanilla), true otherwise (execute vanilla).</returns>
+        private static bool Prefix(Settlement settlement, ref int __result)
+        {
+            try
+            {
+                // Check if this settlement is a capital
+                if (settlement == null || !settlement.IsTown)
+                {
+                    return true; // Not a town, execute vanilla
+                }
+
+                if (!CapitalManager.IsCapital(settlement))
+                {
+                    return true; // Not a capital, execute vanilla (+1 troop)
+                }
+
+                // This is a capital - disable vanilla recruitment
+                // Our CapitalGarrisonBehavior will handle recruitment with +3 troops
+                __result = 0; // No vanilla recruitment for capitals
+                return false; // Skip vanilla method execution
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error("Error in DisableVanillaGarrisonForCapitals_Patch", ex);
+                return true; // On error, execute vanilla to avoid breaking game
+            }
+        }
+    }
+}
