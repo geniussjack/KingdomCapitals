@@ -37,8 +37,20 @@ namespace KingdomCapitals.Patches
                     return;
                 }
 
-                // Replace the collection with our interceptor
+                // Create interceptor and copy existing nameplates to preserve them
                 var interceptor = new CapitalNameplateInterceptor();
+
+                // Copy existing nameplates if any
+                if (__instance.Nameplates != null && __instance.Nameplates.Count > 0)
+                {
+                    ModLogger.Log($"Copying {__instance.Nameplates.Count} existing nameplates to interceptor");
+                    foreach (var nameplate in __instance.Nameplates)
+                    {
+                        interceptor.Add(nameplate);
+                    }
+                }
+
+                // Replace the collection with our interceptor
                 __instance.Nameplates = interceptor;
 
                 ModLogger.Log("Successfully injected CapitalNameplateInterceptor");
@@ -65,13 +77,42 @@ namespace KingdomCapitals.Patches
                     return;
                 }
 
+                // Skip if already our custom ViewModel
+                if (item is CapitalSettlementNameplateVM)
+                {
+                    base.InsertItem(index, item);
+                    return;
+                }
+
                 // Use Traverse to extract private fields from the original ViewModel
                 Traverse traverse = Traverse.Create(item);
 
                 Settlement settlement = item.Settlement;  // Public property
+
+                // DEBUG: List all available fields (only for first settlement)
+                if (index == 0)
+                {
+                    var fields = traverse.Fields();
+                    ModLogger.Log($"[DEBUG] Available fields in SettlementNameplateVM: {string.Join(", ", fields)}");
+                }
+
+                // Try to extract private fields - try multiple possible field names
                 GameEntity targetEntity = traverse.Field("_targetEntity").GetValue<GameEntity>();
+                if (targetEntity == null) targetEntity = traverse.Field("targetEntity").GetValue<GameEntity>();
+                if (targetEntity == null) targetEntity = traverse.Field("m_targetEntity").GetValue<GameEntity>();
+
                 Camera camera = traverse.Field("_camera").GetValue<Camera>();
+                if (camera == null) camera = traverse.Field("camera").GetValue<Camera>();
+                if (camera == null) camera = traverse.Field("m_camera").GetValue<Camera>();
+
                 Action<Vec2> fastMoveCameraToPosition = traverse.Field("_fastMoveCameraToPosition").GetValue<Action<Vec2>>();
+                if (fastMoveCameraToPosition == null) fastMoveCameraToPosition = traverse.Field("fastMoveCameraToPosition").GetValue<Action<Vec2>>();
+                if (fastMoveCameraToPosition == null) fastMoveCameraToPosition = traverse.Field("m_fastMoveCameraToPosition").GetValue<Action<Vec2>>();
+
+                // Debug logging
+                string settlementName = settlement != null ? settlement.Name.ToString() : "NULL";
+                bool isCapital = settlement != null && CapitalManager.IsCapital(settlement);
+                ModLogger.Log($"[DEBUG] {settlementName}: targetEntity={targetEntity != null}, camera={camera != null}, fastMove={fastMoveCameraToPosition != null}, IsCapital={isCapital}");
 
                 // Create our custom ViewModel if we successfully extracted all fields
                 if (settlement != null && targetEntity != null && camera != null && fastMoveCameraToPosition != null)
@@ -84,14 +125,13 @@ namespace KingdomCapitals.Patches
                     );
 
                     base.InsertItem(index, customVM);
-                    ModLogger.Log($"Replaced nameplate for: {settlement.Name.ToString()} (IsCapital: {customVM.IsCapital})");
+                    ModLogger.Log($"✓ Created CapitalNameplateVM for: {settlement.Name.ToString()} (IsCapital: {customVM.IsCapital})");
                 }
                 else
                 {
                     // Fallback to original if extraction failed
                     base.InsertItem(index, item);
-                    string settlementName = settlement != null ? settlement.Name.ToString() : "unknown";
-                    ModLogger.Log($"Using original nameplate for: {settlementName}");
+                    ModLogger.Log($"✗ Using original nameplate for: {settlementName} (field extraction failed)");
                 }
             }
             catch (Exception ex)
