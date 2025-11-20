@@ -72,11 +72,12 @@ namespace KingdomCapitals.Patches
                 string originalName = __result.ToString();
 
                 // Skip if name is empty or already contains crown icon
-                if (string.IsNullOrEmpty(originalName) || originalName.Contains("👑"))
+                if (string.IsNullOrEmpty(originalName) || originalName.Contains("♛"))
                     return;
 
-                // Use Unicode crown emoji - simple and guaranteed to work!
-                string crownIcon = "👑 ";
+                // Use Unicode chess queen symbol (U+265B) - represents a crown
+                // This is from basic Unicode and should be supported by most fonts
+                string crownIcon = "♛ ";
 
                 // Create new TextObject with crown icon prefix
                 string crownedName = $"{crownIcon}{originalName}";
