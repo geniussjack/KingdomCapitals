@@ -1,5 +1,4 @@
 using KingdomCapitals.Constants;
-using KingdomCapitals.Patches;
 using KingdomCapitals.Services;
 using KingdomCapitals.Utils;
 using System;
@@ -52,9 +51,6 @@ namespace KingdomCapitals.Core
             }
 
             _isInitialized = true;
-
-            // Clear the settlement name cache to ensure fresh color markup
-            SettlementNameColorPatch.ClearCache();
 
             ModLogger.Log(string.Format(Messages.Log.CapitalManagerInitializedFormat, _activeCapitals.Count));
         }

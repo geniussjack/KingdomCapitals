@@ -3,7 +3,7 @@ using KingdomCapitals.Core;
 using KingdomCapitals.Models;
 using KingdomCapitals.Utils;
 using System;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
 
 namespace KingdomCapitals.Patches

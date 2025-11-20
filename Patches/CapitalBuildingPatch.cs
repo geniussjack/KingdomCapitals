@@ -3,7 +3,6 @@ using KingdomCapitals.Core;
 using KingdomCapitals.Models;
 using KingdomCapitals.Utils;
 using System;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 
@@ -79,15 +78,9 @@ namespace KingdomCapitals.Patches
                 // Try different possible field names
                 object buildingLevels = traverse.Field("BuildingLevels").GetValue();
 
-                if (buildingLevels == null)
-                {
-                    buildingLevels = traverse.Field("_buildingLevels").GetValue();
-                }
+                buildingLevels ??= traverse.Field("_buildingLevels").GetValue();
 
-                if (buildingLevels == null)
-                {
-                    buildingLevels = traverse.Field("buildingLevels").GetValue();
-                }
+                buildingLevels ??= traverse.Field("buildingLevels").GetValue();
 
                 if (buildingLevels is Array levels)
                 {
