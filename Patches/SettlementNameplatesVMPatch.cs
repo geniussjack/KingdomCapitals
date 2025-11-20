@@ -26,9 +26,16 @@ namespace KingdomCapitals.Patches
 
         /// <summary>
         /// Postfix patch - replaces Nameplates collection with our interceptor.
+        /// TEMPORARILY DISABLED - this approach breaks nameplate rendering.
         /// </summary>
         static void Postfix(SettlementNameplatesVM __instance)
         {
+            // DISABLED: Replacing the Nameplates collection breaks UI rendering
+            // We need a different approach - programmatically add widgets via Harmony
+            ModLogger.Log("SettlementNameplatesVMPatch.Postfix: DISABLED (using alternative approach)");
+            return;
+
+            /*
             try
             {
                 if (__instance == null)
@@ -47,6 +54,7 @@ namespace KingdomCapitals.Patches
             {
                 ModLogger.Error("Error in SettlementNameplatesVMPatch", ex);
             }
+            */
         }
     }
 
@@ -72,6 +80,10 @@ namespace KingdomCapitals.Patches
                 GameEntity targetEntity = traverse.Field("_targetEntity").GetValue<GameEntity>();
                 Camera camera = traverse.Field("_camera").GetValue<Camera>();
                 Action<Vec2> fastMoveCameraToPosition = traverse.Field("_fastMoveCameraToPosition").GetValue<Action<Vec2>>();
+
+                // Debug logging to see what's null
+                string settlementName = settlement != null ? settlement.Name.ToString() : "NULL";
+                ModLogger.Log($"[DEBUG] Settlement: {settlementName}, targetEntity: {(targetEntity != null ? "OK" : "NULL")}, camera: {(camera != null ? "OK" : "NULL")}, fastMove: {(fastMoveCameraToPosition != null ? "OK" : "NULL")}");
 
                 // Create our custom ViewModel if we successfully extracted all fields
                 if (settlement != null && targetEntity != null && camera != null && fastMoveCameraToPosition != null)
