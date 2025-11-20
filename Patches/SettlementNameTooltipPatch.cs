@@ -30,9 +30,9 @@ namespace KingdomCapitals.Patches
         /// </summary>
         static bool Prepare()
         {
-            // DISABLED: Now using ViewModel approach instead
-            ModLogger.Log("SettlementNameColorPatch DISABLED: Using ViewModel approach for crown icon display");
-            return false;
+            // RE-ENABLED: Using simple text marker approach
+            ModLogger.Log("SettlementNameColorPatch ENABLED: Will add [★] marker to capital names");
+            return true;
         }
 
         /// <summary>
@@ -71,25 +71,25 @@ namespace KingdomCapitals.Patches
                 // Get the original name text
                 string originalName = __result.ToString();
 
-                // Skip if name is empty or already contains crown icon
-                if (string.IsNullOrEmpty(originalName) || originalName.Contains("♛"))
+                // Skip if name is empty or already contains capital marker
+                if (string.IsNullOrEmpty(originalName) || originalName.Contains("[★]"))
                     return;
 
-                // Use Unicode chess queen symbol (U+265B) - represents a crown
-                // This is from basic Unicode and should be supported by most fonts
-                string crownIcon = "♛ ";
+                // Use simple star marker in brackets - guaranteed ASCII compatibility
+                // If this doesn't work, we'll need to implement proper Sprite system
+                string capitalMarker = "[★] ";
 
-                // Create new TextObject with crown icon prefix
-                string crownedName = $"{crownIcon}{originalName}";
-                TextObject crownedTextObject = new TextObject(crownedName);
+                // Create new TextObject with capital marker prefix
+                string markedName = $"{capitalMarker}{originalName}";
+                TextObject markedTextObject = new TextObject(markedName);
 
                 // Cache the modified name
-                _capitalNameCache[__instance.StringId] = crownedTextObject;
+                _capitalNameCache[__instance.StringId] = markedTextObject;
 
-                // Return the crowned name
-                __result = crownedTextObject;
+                // Return the marked name
+                __result = markedTextObject;
 
-                ModLogger.Log($"Applied crown icon to capital name: {originalName}");
+                ModLogger.Log($"Applied capital marker to: {originalName}");
             }
             catch (Exception ex)
             {
