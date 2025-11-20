@@ -3,6 +3,7 @@ using KingdomCapitals.Core;
 using KingdomCapitals.Models;
 using KingdomCapitals.Utils;
 using System;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -86,18 +87,18 @@ namespace KingdomCapitals.Patches
         /// Postfix patch - ensures garrison wage is 0 for capitals.
         /// This is a backup in case the MobileParty.TotalWage patch doesn't cover all cases.
         /// </summary>
-        private static void Postfix(MobileParty party, ref int __result)
+        private static void Postfix(MobileParty mobileParty, ref ExplainedNumber __result)
         {
             try
             {
                 // Only modify garrison parties
-                if (party == null || !party.IsGarrison)
+                if (mobileParty == null || !mobileParty.IsGarrison)
                 {
                     return;
                 }
 
                 // Get the settlement this garrison belongs to
-                Settlement settlement = party.CurrentSettlement;
+                Settlement settlement = mobileParty.CurrentSettlement;
                 if (settlement == null)
                 {
                     return;
@@ -110,8 +111,10 @@ namespace KingdomCapitals.Patches
                 }
 
                 // Set wage to 0 for capital garrisons
-                int originalWage = __result;
-                __result = 0;
+                float originalWage = __result.ResultNumber;
+
+                // Add explanation and set result to 0
+                __result.Add("Capital Garrison (Free)", -originalWage);
 
                 if (ModSettings.Instance?.EnableDebugLogging == true && originalWage > 0)
                 {
