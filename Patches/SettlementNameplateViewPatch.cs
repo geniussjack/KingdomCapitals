@@ -25,8 +25,8 @@ namespace KingdomCapitals.Patches
 
         private static bool Prepare()
         {
-            ModLogger.Log("SettlementNameplateViewPatch: Preparing to inject crown icons via View layer");
-            return true;
+            ModLogger.Log("SettlementNameplateViewPatch DISABLED: Patch causes settlement text fields to disappear");
+            return false; // DISABLED - causes UI issues
         }
 
         /// <summary>
