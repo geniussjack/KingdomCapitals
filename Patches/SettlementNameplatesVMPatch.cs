@@ -1,8 +1,9 @@
 using HarmonyLib;
 using KingdomCapitals.Utils;
 using KingdomCapitals.ViewModels;
+using SandBox.ViewModelCollection.Nameplate;
 using System;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapBar.MapNameplates;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 
 namespace KingdomCapitals.Patches

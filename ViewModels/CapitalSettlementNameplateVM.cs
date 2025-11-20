@@ -1,8 +1,8 @@
 using HarmonyLib;
 using KingdomCapitals.Core;
+using SandBox.ViewModelCollection.Nameplate;
 using System;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Map.MapBar.MapNameplates;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
 
