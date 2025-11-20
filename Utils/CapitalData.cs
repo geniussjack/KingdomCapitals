@@ -14,7 +14,7 @@ namespace KingdomCapitals.Utils
         /// Mapping of kingdom StringId to capital settlement StringId.
         /// Based on Bannerlord v1.2.12+ default capitals.
         /// </summary>
-        private static readonly Dictionary<string, string> KingdomCapitalMap = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> KingdomCapitalMap = new()
         {
             { "battania", "town_B1" },      // Marunath
             { "vlandia", "town_V5" },       // Galend
@@ -31,10 +31,7 @@ namespace KingdomCapitals.Utils
         /// </summary>
         public static bool IsDefaultCapital(Settlement settlement)
         {
-            if (settlement == null || !settlement.IsTown)
-                return false;
-
-            return KingdomCapitalMap.ContainsValue(settlement.StringId);
+            return settlement != null && settlement.IsTown && KingdomCapitalMap.ContainsValue(settlement.StringId);
         }
 
         /// <summary>
@@ -42,13 +39,9 @@ namespace KingdomCapitals.Utils
         /// </summary>
         public static Settlement GetDefaultCapital(Kingdom kingdom)
         {
-            if (kingdom == null)
-                return null;
-
-            if (!KingdomCapitalMap.TryGetValue(kingdom.StringId, out string capitalStringId))
-                return null;
-
-            return Settlement.Find(capitalStringId);
+            return kingdom == null
+                ? null
+                : !KingdomCapitalMap.TryGetValue(kingdom.StringId, out string capitalStringId) ? null : Settlement.Find(capitalStringId);
         }
 
         /// <summary>
@@ -67,13 +60,12 @@ namespace KingdomCapitals.Utils
         public static Kingdom GetDefaultKingdomForCapital(Settlement settlement)
         {
             if (settlement == null)
+            {
                 return null;
+            }
 
-            var entry = KingdomCapitalMap.FirstOrDefault(kvp => kvp.Value == settlement.StringId);
-            if (entry.Key == null)
-                return null;
-
-            return Kingdom.All.FirstOrDefault(k => k.StringId == entry.Key);
+            KeyValuePair<string, string> entry = KingdomCapitalMap.FirstOrDefault(kvp => kvp.Value == settlement.StringId);
+            return entry.Key == null ? null : Kingdom.All.FirstOrDefault(k => k.StringId == entry.Key);
         }
     }
 }

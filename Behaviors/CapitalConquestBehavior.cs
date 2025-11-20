@@ -51,18 +51,21 @@ namespace KingdomCapitals.Behaviors
             {
                 // Only process if this is a capital being conquered
                 if (!CapitalManager.IsCapital(settlement))
+                {
                     return;
+                }
 
                 // Ignore non-conquest transfers (gifts, grants, etc.)
-                if (detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege &&
-                    detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByBarter &&
-                    detail != ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByRebellion)
+                if (detail is not ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.BySiege and
+                    not ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByBarter and
+                    not ChangeOwnerOfSettlementAction.ChangeOwnerOfSettlementDetail.ByRebellion)
+                {
                     return;
+                }
 
-                Kingdom oldKingdom = oldOwner?.MapFaction as Kingdom;
                 Kingdom newKingdom = capturerHero?.MapFaction as Kingdom;
 
-                if (oldKingdom == null)
+                if (oldOwner?.MapFaction is not Kingdom oldKingdom)
                 {
                     ModLogger.Warning(string.Format(Messages.Warnings.CapitalConqueredOldKingdomNull, settlement.Name));
                     return;
@@ -139,23 +142,23 @@ namespace KingdomCapitals.Behaviors
                 // 2. Transfer capital to ruling clan WITHOUT voting (if enabled)
                 if (Settings?.TransferCapitalToRulingClan != false)
                 {
-                    SettlementTransferService.TransferCapitalToRulingClan(capital, conquererKingdom);
+                    _ = SettlementTransferService.TransferCapitalToRulingClan(capital, conquererKingdom);
                 }
 
                 // 3. Transfer all other settlements of defeated kingdom
-                SettlementTransferService.TransferAllSettlements(defeatedKingdom, conquererKingdom);
+                _ = SettlementTransferService.TransferAllSettlements(defeatedKingdom, conquererKingdom);
 
                 // 4. Vassalize all clans of defeated kingdom (if enabled)
                 if (Settings?.VassalizeDefeatedClans != false)
                 {
-                    KingdomService.VassalizeDefeatedClans(defeatedKingdom, conquererKingdom);
+                    _ = KingdomService.VassalizeDefeatedClans(defeatedKingdom, conquererKingdom);
                 }
 
                 // 5. Remove capital status from conquered settlement
                 CapitalManager.UnregisterCapital(capital, defeatedKingdom);
 
                 // 6. Destroy the defeated kingdom
-                KingdomService.DestroyKingdom(defeatedKingdom);
+                _ = KingdomService.DestroyKingdom(defeatedKingdom);
 
                 // 7. Notify player (if enabled)
                 if (Settings?.EnableConquestNotifications != false)

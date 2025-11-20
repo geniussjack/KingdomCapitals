@@ -1,6 +1,7 @@
 using KingdomCapitals.Constants;
 using KingdomCapitals.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -23,7 +24,7 @@ namespace KingdomCapitals.Services
             try
             {
                 int vassalizedCount = 0;
-                var clansToVassalize = defeatedKingdom.Clans.ToList();
+                List<Clan> clansToVassalize = defeatedKingdom.Clans.ToList();
 
                 foreach (Clan clan in clansToVassalize)
                 {
@@ -55,7 +56,9 @@ namespace KingdomCapitals.Services
             try
             {
                 if (kingdom == null || kingdom.IsEliminated)
+                {
                     return false;
+                }
 
                 DestroyKingdomAction.Apply(kingdom);
                 ModLogger.Log(string.Format(Messages.Log.KingdomDestroyedFormat, kingdom.Name.ToString()));

@@ -5,12 +5,12 @@ using SandBox.GauntletUI.Map;
 using SandBox.ViewModelCollection.Nameplate;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.GauntletUI;
 using TaleWorlds.GauntletUI.BaseTypes;
-using TaleWorlds.Library;
+using TaleWorlds.TwoDimension;
 
 namespace KingdomCapitals.Patches
 {
@@ -21,9 +21,9 @@ namespace KingdomCapitals.Patches
     [HarmonyPatch(typeof(GauntletMapSettlementNameplateView))]
     public static class SettlementNameplateViewPatch
     {
-        private static readonly Dictionary<Settlement, Widget> _crownWidgets = new Dictionary<Settlement, Widget>();
+        private static readonly Dictionary<Settlement, Widget> _crownWidgets = new();
 
-        static bool Prepare()
+        private static bool Prepare()
         {
             ModLogger.Log("SettlementNameplateViewPatch: Preparing to inject crown icons via View layer");
             return true;
@@ -34,35 +34,33 @@ namespace KingdomCapitals.Patches
         /// </summary>
         [HarmonyPostfix]
         [HarmonyPatch("CreateLayout")]
-        static void CreateLayout_Postfix(GauntletMapSettlementNameplateView __instance)
+        private static void CreateLayout_Postfix(GauntletMapSettlementNameplateView __instance)
         {
             try
             {
                 // Get the GauntletLayer from the view
-                var layerField = AccessTools.Field(typeof(GauntletMapSettlementNameplateView), "_gauntletLayer");
+                FieldInfo layerField = AccessTools.Field(typeof(GauntletMapSettlementNameplateView), "_gauntletLayer");
                 if (layerField == null)
                 {
                     ModLogger.Log("CreateLayout_Postfix: Cannot find _gauntletLayer field");
                     return;
                 }
 
-                var gauntletLayer = layerField.GetValue(__instance) as GauntletLayer;
-                if (gauntletLayer == null)
+                if (layerField.GetValue(__instance) is not GauntletLayer gauntletLayer)
                 {
                     ModLogger.Log("CreateLayout_Postfix: GauntletLayer is null");
                     return;
                 }
 
                 // Get the ViewModel (SettlementNameplatesVM)
-                var dataSourceField = AccessTools.Property(typeof(GauntletMapSettlementNameplateView), "DataSource");
+                PropertyInfo dataSourceField = AccessTools.Property(typeof(GauntletMapSettlementNameplateView), "DataSource");
                 if (dataSourceField == null)
                 {
                     ModLogger.Log("CreateLayout_Postfix: Cannot find DataSource property");
                     return;
                 }
 
-                var nameplatesVM = dataSourceField.GetValue(__instance, null) as SettlementNameplatesVM;
-                if (nameplatesVM == null || nameplatesVM.Nameplates == null)
+                if (dataSourceField.GetValue(__instance, null) is not SettlementNameplatesVM nameplatesVM || nameplatesVM.Nameplates == null)
                 {
                     ModLogger.Log("CreateLayout_Postfix: SettlementNameplatesVM or Nameplates is null");
                     return;
@@ -72,7 +70,7 @@ namespace KingdomCapitals.Patches
 
                 // Inject crown icons for capitals
                 int crownCount = 0;
-                foreach (var nameplate in nameplatesVM.Nameplates)
+                foreach (SettlementNameplateVM nameplate in nameplatesVM.Nameplates)
                 {
                     if (nameplate.Settlement != null && CapitalManager.IsCapital(nameplate.Settlement))
                     {
@@ -98,7 +96,9 @@ namespace KingdomCapitals.Patches
             {
                 // Skip if already has crown
                 if (_crownWidgets.ContainsKey(nameplate.Settlement))
+                {
                     return;
+                }
 
                 // Find the widget for this nameplate
                 // This is tricky - we need to find the widget bound to this ViewModel
@@ -110,7 +110,7 @@ namespace KingdomCapitals.Patches
                 }
 
                 // Create crown icon widget programmatically
-                var crownContainer = new Widget(layer.UIContext)
+                Widget crownContainer = new(layer.UIContext)
                 {
                     Id = $"capital_crown_{nameplate.Settlement.StringId}",
                     WidthSizePolicy = SizePolicy.Fixed,
@@ -125,8 +125,8 @@ namespace KingdomCapitals.Patches
                 };
 
                 // Try to get sprite
-                var spriteData = layer.UIContext.SpriteData;
-                var sprite = spriteData.GetSprite("ui_kingdomcapitals\\capital_crown_icon");
+                SpriteData spriteData = layer.UIContext.SpriteData;
+                Sprite sprite = spriteData.GetSprite("ui_kingdomcapitals\\capital_crown_icon");
 
                 if (sprite == null)
                 {
@@ -135,7 +135,7 @@ namespace KingdomCapitals.Patches
                 }
 
                 // Create the actual image widget with crown sprite
-                var crownImage = new ImageWidget(layer.UIContext)
+                ImageWidget crownImage = new(layer.UIContext)
                 {
                     WidthSizePolicy = SizePolicy.Fixed,
                     HeightSizePolicy = SizePolicy.Fixed,
@@ -164,7 +164,7 @@ namespace KingdomCapitals.Patches
         /// </summary>
         [HarmonyPostfix]
         [HarmonyPatch("OnFinalize")]
-        static void OnFinalize_Postfix()
+        private static void OnFinalize_Postfix()
         {
             _crownWidgets.Clear();
         }

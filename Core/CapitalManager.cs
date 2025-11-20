@@ -67,7 +67,9 @@ namespace KingdomCapitals.Core
         public static bool IsCapital(Settlement settlement)
         {
             if (settlement == null)
+            {
                 return false;
+            }
 
             // Lazy initialization if kingdoms weren't loaded during OnGameStart
             if (_isInitialized && _activeCapitals.Count == 0 && Kingdom.All.Count() > 0)
@@ -77,10 +79,7 @@ namespace KingdomCapitals.Core
                 Initialize();
             }
 
-            if (!_isInitialized)
-                return false;
-
-            return _activeCapitals.ContainsValue(settlement);
+            return _isInitialized && _activeCapitals.ContainsValue(settlement);
         }
 
         /// <summary>
@@ -91,9 +90,11 @@ namespace KingdomCapitals.Core
         public static Settlement GetCapital(Kingdom kingdom)
         {
             if (kingdom == null || !_isInitialized)
+            {
                 return null;
+            }
 
-            _activeCapitals.TryGetValue(kingdom.StringId, out Settlement capital);
+            _ = _activeCapitals.TryGetValue(kingdom.StringId, out Settlement capital);
             return capital;
         }
 
@@ -114,7 +115,9 @@ namespace KingdomCapitals.Core
         public static void UnregisterCapital(Settlement settlement, Kingdom defeatedKingdom)
         {
             if (settlement == null || defeatedKingdom == null || !_isInitialized)
+            {
                 return;
+            }
 
             if (_activeCapitals.Remove(defeatedKingdom.StringId))
             {
@@ -130,15 +133,17 @@ namespace KingdomCapitals.Core
         public static void MarkAsRecentlyCaptured(Settlement capital)
         {
             if (capital == null || !_isInitialized)
+            {
                 return;
+            }
 
-            _recentlyCapturedCapitals.Add(capital);
+            _ = _recentlyCapturedCapitals.Add(capital);
             ModLogger.Log(string.Format(Messages.Log.MarkedAsRecentlyCapturedFormat, capital.Name));
 
             // Remove mark after 1 in-game day
             CampaignEvents.DailyTickEvent.AddNonSerializedListener(null, () =>
             {
-                _recentlyCapturedCapitals.Remove(capital);
+                _ = _recentlyCapturedCapitals.Remove(capital);
             });
         }
 
@@ -149,10 +154,7 @@ namespace KingdomCapitals.Core
         /// <returns>True if the settlement was recently captured as a capital, false otherwise.</returns>
         public static bool WasRecentlyCapturedCapital(Settlement settlement)
         {
-            if (!_isInitialized)
-                return false;
-
-            return _recentlyCapturedCapitals.Contains(settlement);
+            return _isInitialized && _recentlyCapturedCapitals.Contains(settlement);
         }
 
         /// <summary>
@@ -190,7 +192,7 @@ namespace KingdomCapitals.Core
                 MarkAsRecentlyCaptured(capital);
 
                 // Transfer capital directly to ruling clan
-                SettlementTransferService.TransferCapitalToRulingClan(capital, attackerKingdom);
+                _ = SettlementTransferService.TransferCapitalToRulingClan(capital, attackerKingdom);
 
                 // Remove capital status
                 UnregisterCapital(capital, defenderKingdom);

@@ -45,17 +45,23 @@ namespace KingdomCapitals.Behaviors
             try
             {
                 if (victim?.Clan?.Kingdom == null)
+                {
                     return;
+                }
 
                 Kingdom kingdom = victim.Clan.Kingdom;
 
                 // Check if the victim was the ruler
                 if (kingdom.Leader != victim)
+                {
                     return;
+                }
 
                 Settlement capital = CapitalManager.GetCapital(kingdom);
                 if (capital == null)
+                {
                     return;
+                }
 
                 // Wait for new ruler to be appointed
                 CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, () =>
@@ -97,7 +103,7 @@ namespace KingdomCapitals.Behaviors
                 // Transfer capital to new ruler
                 if (capital.OwnerClan != newRuler.Clan)
                 {
-                    CapitalManager.TransferCapitalOwnership(newRuler, capital);
+                    _ = CapitalManager.TransferCapitalOwnership(newRuler, capital);
                     ModLogger.Log(string.Format(Messages.Log.CapitalTransferredToNewRulerFormat, capital.Name, newRuler.Name));
                 }
             }

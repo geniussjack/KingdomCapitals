@@ -46,7 +46,9 @@ namespace KingdomCapitals.Behaviors
             {
                 // Only process towns that are capitals
                 if (!settlement.IsTown || !CapitalManager.IsCapital(settlement))
+                {
                     return;
+                }
 
                 // Check if settlement has food available
                 if (settlement.Town.FoodStocks <= 0)
@@ -77,7 +79,9 @@ namespace KingdomCapitals.Behaviors
             try
             {
                 if (settlement.Town?.Owner?.Culture == null)
+                {
                     return;
+                }
 
                 // Determine troop tier based on prosperity
                 int troopTier = CalculateTroopTier(settlement.Town.Prosperity);
@@ -93,7 +97,7 @@ namespace KingdomCapitals.Behaviors
 
                 // Add troops to garrison
                 int reinforcementCount = Settings?.DailyGarrisonReinforcement ?? 3;
-                settlement.Town.GarrisonParty?.MemberRoster.AddToCounts(troopType, reinforcementCount, false, 0, 0, true, -1);
+                _ = (settlement.Town.GarrisonParty?.MemberRoster.AddToCounts(troopType, reinforcementCount, false, 0, 0, true, -1));
 
                 ModLogger.LogGarrisonReinforcement(settlement, reinforcementCount, troopType.Name.ToString());
             }
@@ -130,17 +134,21 @@ namespace KingdomCapitals.Behaviors
                 // Get basic troop for culture
                 CharacterObject basicTroop = culture.BasicTroop;
                 if (basicTroop == null)
+                {
                     return null;
+                }
 
                 CharacterObject currentTroop = basicTroop;
 
                 // Upgrade to target tier
                 for (int currentTier = GameplayConstants.MinTroopTier; currentTier < targetTier; currentTier++)
                 {
-                    var upgrades = currentTroop.UpgradeTargets;
+                    CharacterObject[] upgrades = currentTroop.UpgradeTargets;
 
                     if (upgrades == null || upgrades.Length == 0)
+                    {
                         break; // No more upgrades available
+                    }
 
                     // Randomly select upgrade path if branching occurs
                     currentTroop = upgrades[MBRandom.RandomInt(upgrades.Length)];
@@ -165,7 +173,9 @@ namespace KingdomCapitals.Behaviors
             try
             {
                 if (settlement.Town?.GarrisonParty == null)
+                {
                     return;
+                }
 
                 float consumptionMultiplier = Settings?.GarrisonFoodConsumptionMultiplier ?? 0.5f;
 

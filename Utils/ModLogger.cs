@@ -20,7 +20,7 @@ namespace KingdomCapitals.Utils
             ModConstants.LogFileName
         );
 
-        private static readonly object _lockObject = new object();
+        private static readonly object _lockObject = new();
 
         static ModLogger()
         {
@@ -29,7 +29,7 @@ namespace KingdomCapitals.Utils
                 string logDirectory = Path.GetDirectoryName(LogFilePath);
                 if (!Directory.Exists(logDirectory))
                 {
-                    Directory.CreateDirectory(logDirectory);
+                    _ = Directory.CreateDirectory(logDirectory);
                 }
             }
             catch (Exception ex)

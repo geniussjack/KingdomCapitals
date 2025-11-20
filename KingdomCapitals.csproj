@@ -41,6 +41,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SandBox.GauntletUI">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\SandBox\bin\Win64_Shipping_Client\SandBox.GauntletUI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -118,6 +121,12 @@
       <HintPath>$(GameFolder)\Modules\Bannerlord.MBOptionScreen\bin\Win64_Shipping_Client\MCMv5.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="TaleWorlds.ScreenSystem">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.ScreenSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.TwoDimension">
+      <HintPath>D:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.TwoDimension.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <!-- Core -->
@@ -150,9 +159,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="GUI\Prefabs\Nameplate\SettlementNameplateItem.xml" />
+    <Content Include="GUI\SpriteData.xml" />
+    <Content Include="GUI\SpriteParts\ui_kingdomcapitals\capital_crown_icon%402x.png" />
+    <Content Include="GUI\SpriteParts\ui_kingdomcapitals\capital_crown_icon.png" />
+    <Content Include="ModuleData\Languages\EN\language_data.xml" />
+    <Content Include="ModuleData\Languages\EN\strings.xml" />
+    <Content Include="ModuleData\settlements.xml" />
     <Content Include="SubModule.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GUI\SpriteParts\ui_kingdomcapitals\README.md" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

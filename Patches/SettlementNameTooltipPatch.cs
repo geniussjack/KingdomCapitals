@@ -20,7 +20,7 @@ namespace KingdomCapitals.Patches
         /// Manually specifies the target property getter to patch.
         /// </summary>
         /// <returns>MethodBase of the Settlement.Name getter.</returns>
-        static System.Reflection.MethodBase TargetMethod()
+        private static System.Reflection.MethodBase TargetMethod()
         {
             return AccessTools.PropertyGetter(typeof(Settlement), "Name");
         }
@@ -28,7 +28,7 @@ namespace KingdomCapitals.Patches
         /// <summary>
         /// Determines if the patch should be applied.
         /// </summary>
-        static bool Prepare()
+        private static bool Prepare()
         {
             // DISABLED: Using ViewModel + Sprite approach instead
             ModLogger.Log("SettlementNameColorPatch DISABLED: Using ViewModel + Sprite system for crown display");
@@ -41,7 +41,7 @@ namespace KingdomCapitals.Patches
         /// Key: Settlement.StringId, Value: modified TextObject
         /// </summary>
         private static readonly System.Collections.Generic.Dictionary<string, TextObject> _capitalNameCache
-            = new System.Collections.Generic.Dictionary<string, TextObject>();
+            = new();
 
         /// <summary>
         /// Postfix patch for Settlement.Name getter.
@@ -49,17 +49,21 @@ namespace KingdomCapitals.Patches
         /// </summary>
         /// <param name="__instance">The Settlement instance.</param>
         /// <param name="__result">The original name TextObject (will be modified for capitals).</param>
-        static void Postfix(Settlement __instance, ref TextObject __result)
+        private static void Postfix(Settlement __instance, ref TextObject __result)
         {
             try
             {
                 // Skip if settlement is null or result is null
                 if (__instance == null || __result == null)
+                {
                     return;
+                }
 
                 // Check if this settlement is a capital
                 if (!CapitalManager.IsCapital(__instance))
+                {
                     return;
+                }
 
                 // Check cache first to avoid redundant modifications
                 if (_capitalNameCache.TryGetValue(__instance.StringId, out TextObject cachedName))
@@ -73,7 +77,9 @@ namespace KingdomCapitals.Patches
 
                 // Skip if name is empty or already contains capital marker
                 if (string.IsNullOrEmpty(originalName) || originalName.Contains("[★]"))
+                {
                     return;
+                }
 
                 // Use simple star marker in brackets - guaranteed ASCII compatibility
                 // If this doesn't work, we'll need to implement proper Sprite system
@@ -81,7 +87,7 @@ namespace KingdomCapitals.Patches
 
                 // Create new TextObject with capital marker prefix
                 string markedName = $"{capitalMarker}{originalName}";
-                TextObject markedTextObject = new TextObject(markedName);
+                TextObject markedTextObject = new(markedName);
 
                 // Cache the modified name
                 _capitalNameCache[__instance.StringId] = markedTextObject;

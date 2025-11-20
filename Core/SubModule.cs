@@ -3,6 +3,8 @@ using KingdomCapitals.Behaviors;
 using KingdomCapitals.Constants;
 using KingdomCapitals.Utils;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -39,9 +41,9 @@ namespace KingdomCapitals.Core
                 _harmony.PatchAll();
 
                 // Log all patched methods
-                var patchedMethods = _harmony.GetPatchedMethods();
+                IEnumerable<MethodBase> patchedMethods = _harmony.GetPatchedMethods();
                 int patchCount = 0;
-                foreach (var method in patchedMethods)
+                foreach (MethodBase method in patchedMethods)
                 {
                     patchCount++;
                     ModLogger.Log($"Patched method: {method.DeclaringType?.FullName}.{method.Name}");

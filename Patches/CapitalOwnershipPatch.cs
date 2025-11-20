@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
 using HarmonyLib;
+using KingdomCapitals.Constants;
+using KingdomCapitals.Core;
+using KingdomCapitals.Utils;
+using System;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Election;
 using TaleWorlds.CampaignSystem.Settlements;
-using KingdomCapitals.Core;
-using KingdomCapitals.Utils;
-using KingdomCapitals.Constants;
 
 namespace KingdomCapitals.Patches
 {
@@ -22,11 +22,11 @@ namespace KingdomCapitals.Patches
         /// Required for methods with optional parameters.
         /// </summary>
         /// <returns>MethodBase of the AddDecision method.</returns>
-        static System.Reflection.MethodBase TargetMethod()
+        private static System.Reflection.MethodBase TargetMethod()
         {
             try
             {
-                var method = AccessTools.Method(
+                MethodInfo method = AccessTools.Method(
                     typeof(Kingdom),
                     "AddDecision",
                     new Type[] { typeof(KingdomDecision), typeof(bool) }
@@ -53,12 +53,12 @@ namespace KingdomCapitals.Patches
         /// <summary>
         /// Determines if the patch should be applied.
         /// </summary>
-        static bool Prepare()
+        private static bool Prepare()
         {
             try
             {
                 // Try to find the specific method
-                var method = AccessTools.Method(
+                MethodInfo method = AccessTools.Method(
                     typeof(Kingdom),
                     "AddDecision",
                     new Type[] { typeof(KingdomDecision), typeof(bool) }
@@ -86,7 +86,7 @@ namespace KingdomCapitals.Patches
         /// <param name="decision">The kingdom decision being added.</param>
         /// <param name="ignoreInfluenceCost">Whether to ignore influence cost for the decision.</param>
         /// <returns>False if the decision should be blocked, true to allow normal execution.</returns>
-        static bool Prefix(Kingdom __instance, KingdomDecision decision, bool ignoreInfluenceCost)
+        private static bool Prefix(Kingdom __instance, KingdomDecision decision, bool ignoreInfluenceCost)
         {
             try
             {
@@ -96,7 +96,9 @@ namespace KingdomCapitals.Patches
                     Settlement settlement = settlementDecision.Settlement;
 
                     if (settlement == null)
+                    {
                         return true; // Continue with normal flow
+                    }
 
                     // Check if this settlement was recently captured as a capital
                     if (CapitalManager.WasRecentlyCapturedCapital(settlement))
@@ -106,7 +108,7 @@ namespace KingdomCapitals.Patches
                         // Transfer directly to ruling clan (should already be done by CapitalConquestBehavior)
                         if (__instance.RulingClan != null && settlement.OwnerClan != __instance.RulingClan)
                         {
-                            CapitalManager.TransferCapitalOwnership(__instance.RulingClan.Leader, settlement);
+                            _ = CapitalManager.TransferCapitalOwnership(__instance.RulingClan.Leader, settlement);
                         }
 
                         return false; // Prevent voting
@@ -134,7 +136,7 @@ namespace KingdomCapitals.Patches
         /// Manually specifies the target constructor to patch.
         /// </summary>
         /// <returns>MethodBase of the SettlementClaimantDecision constructor.</returns>
-        static System.Reflection.MethodBase TargetMethod()
+        private static System.Reflection.MethodBase TargetMethod()
         {
             return AccessTools.Constructor(
                 typeof(SettlementClaimantDecision),
@@ -145,9 +147,9 @@ namespace KingdomCapitals.Patches
         /// <summary>
         /// Determines if the patch should be applied.
         /// </summary>
-        static bool Prepare()
+        private static bool Prepare()
         {
-            var constructor = AccessTools.Constructor(
+            ConstructorInfo constructor = AccessTools.Constructor(
                 typeof(SettlementClaimantDecision),
                 new Type[] { typeof(Clan), typeof(Settlement) }
             );
@@ -163,12 +165,14 @@ namespace KingdomCapitals.Patches
         /// <param name="proposerClan">The clan proposing the settlement claim.</param>
         /// <param name="settlement">The settlement being claimed.</param>
         /// <returns>False if the decision should be blocked, true to allow normal execution.</returns>
-        static bool Prefix(Clan proposerClan, Settlement settlement)
+        private static bool Prefix(Clan proposerClan, Settlement settlement)
         {
             try
             {
                 if (settlement == null)
+                {
                     return true;
+                }
 
                 // Block decision creation for recently captured capitals
                 if (CapitalManager.WasRecentlyCapturedCapital(settlement))
@@ -197,7 +201,7 @@ namespace KingdomCapitals.Patches
         /// Manually specifies the target method to patch.
         /// </summary>
         /// <returns>MethodBase of the DetermineSupport method.</returns>
-        static System.Reflection.MethodBase TargetMethod()
+        private static System.Reflection.MethodBase TargetMethod()
         {
             return AccessTools.Method(typeof(SettlementClaimantDecision), "DetermineSupport");
         }
@@ -205,7 +209,7 @@ namespace KingdomCapitals.Patches
         /// <summary>
         /// Determines if the patch should be applied.
         /// </summary>
-        static bool Prepare()
+        private static bool Prepare()
         {
             // TEMPORARILY DISABLE THIS PATCH TO TEST OTHER PATCHES
             ModLogger.Log("TEMPORARILY DISABLED SettlementClaimantDecision_DetermineSupport_Patch to test other patches");
@@ -218,7 +222,7 @@ namespace KingdomCapitals.Patches
         /// <param name="__instance">The SettlementClaimantDecision instance.</param>
         /// <param name="__result">The supporter result to be modified.</param>
         /// <returns>False if support determination should be blocked, true to allow normal execution.</returns>
-        static bool Prefix(SettlementClaimantDecision __instance, ref Supporter __result)
+        private static bool Prefix(SettlementClaimantDecision __instance, ref Supporter __result)
         {
             try
             {

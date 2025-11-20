@@ -1,6 +1,7 @@
 using KingdomCapitals.Constants;
 using KingdomCapitals.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -56,7 +57,7 @@ namespace KingdomCapitals.Services
             try
             {
                 int transferredCount = 0;
-                var settlementsToTransfer = defeatedKingdom.Settlements.ToList();
+                List<Settlement> settlementsToTransfer = defeatedKingdom.Settlements.ToList();
 
                 foreach (Settlement settlement in settlementsToTransfer)
                 {
@@ -101,7 +102,7 @@ namespace KingdomCapitals.Services
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Failed to transfer settlement: {settlement.Name.ToString()}", ex);
+                ModLogger.Error($"Failed to transfer settlement: {settlement.Name}", ex);
                 return false;
             }
         }

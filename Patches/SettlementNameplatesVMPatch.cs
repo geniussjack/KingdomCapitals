@@ -1,8 +1,10 @@
 using HarmonyLib;
+using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
 using KingdomCapitals.ViewModels;
 using SandBox.ViewModelCollection.Nameplate;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -18,7 +20,7 @@ namespace KingdomCapitals.Patches
     [HarmonyPatch(new Type[] { typeof(Camera), typeof(Action<Vec2>) })]
     public static class SettlementNameplatesVMPatch
     {
-        static bool Prepare()
+        private static bool Prepare()
         {
             ModLogger.Log("SettlementNameplatesVMPatch: Preparing to inject capital nameplate system");
             return true;
@@ -29,7 +31,7 @@ namespace KingdomCapitals.Patches
         /// Cannot extract private fields (_targetEntity, _camera) needed for CapitalSettlementNameplateVM constructor.
         /// Using alternative approach: programmatic widget injection in View layer.
         /// </summary>
-        static void Postfix(SettlementNameplatesVM __instance)
+        private static void Postfix(SettlementNameplatesVM __instance)
         {
             // DISABLED: Field extraction fails because fields are null or have different names
             // Even when extraction succeeds, replacing Nameplates breaks UI rendering
@@ -68,22 +70,36 @@ namespace KingdomCapitals.Patches
                 // DEBUG: List all available fields (only for first settlement)
                 if (index == 0)
                 {
-                    var fields = traverse.Fields();
+                    List<string> fields = traverse.Fields();
                     ModLogger.Log($"[DEBUG] Available fields in SettlementNameplateVM: {string.Join(", ", fields)}");
                 }
 
                 // Try to extract private fields - try multiple possible field names
                 GameEntity targetEntity = traverse.Field("_targetEntity").GetValue<GameEntity>();
-                if (targetEntity == null) targetEntity = traverse.Field("targetEntity").GetValue<GameEntity>();
-                if (targetEntity == null) targetEntity = traverse.Field("m_targetEntity").GetValue<GameEntity>();
+                if (targetEntity == null)
+                {
+                    targetEntity = traverse.Field("targetEntity").GetValue<GameEntity>();
+                }
+
+                if (targetEntity == null)
+                {
+                    targetEntity = traverse.Field("m_targetEntity").GetValue<GameEntity>();
+                }
 
                 Camera camera = traverse.Field("_camera").GetValue<Camera>();
-                if (camera == null) camera = traverse.Field("camera").GetValue<Camera>();
-                if (camera == null) camera = traverse.Field("m_camera").GetValue<Camera>();
+                if (camera == null)
+                {
+                    camera = traverse.Field("camera").GetValue<Camera>();
+                }
+
+                if (camera == null)
+                {
+                    camera = traverse.Field("m_camera").GetValue<Camera>();
+                }
 
                 Action<Vec2> fastMoveCameraToPosition = traverse.Field("_fastMoveCameraToPosition").GetValue<Action<Vec2>>();
-                if (fastMoveCameraToPosition == null) fastMoveCameraToPosition = traverse.Field("fastMoveCameraToPosition").GetValue<Action<Vec2>>();
-                if (fastMoveCameraToPosition == null) fastMoveCameraToPosition = traverse.Field("m_fastMoveCameraToPosition").GetValue<Action<Vec2>>();
+                fastMoveCameraToPosition ??= traverse.Field("fastMoveCameraToPosition").GetValue<Action<Vec2>>();
+                fastMoveCameraToPosition ??= traverse.Field("m_fastMoveCameraToPosition").GetValue<Action<Vec2>>();
 
                 // Debug logging
                 string settlementName = settlement != null ? settlement.Name.ToString() : "NULL";
@@ -93,7 +109,7 @@ namespace KingdomCapitals.Patches
                 // Create our custom ViewModel if we successfully extracted all fields
                 if (settlement != null && targetEntity != null && camera != null && fastMoveCameraToPosition != null)
                 {
-                    var customVM = new CapitalSettlementNameplateVM(
+                    CapitalSettlementNameplateVM customVM = new(
                         settlement,
                         targetEntity,
                         camera,
@@ -101,7 +117,7 @@ namespace KingdomCapitals.Patches
                     );
 
                     base.InsertItem(index, customVM);
-                    ModLogger.Log($"✓ Created CapitalNameplateVM for: {settlement.Name.ToString()} (IsCapital: {customVM.IsCapital})");
+                    ModLogger.Log($"✓ Created CapitalNameplateVM for: {settlement.Name} (IsCapital: {customVM.IsCapital})");
                 }
                 else
                 {
