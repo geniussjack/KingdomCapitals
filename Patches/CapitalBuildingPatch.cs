@@ -103,47 +103,4 @@ namespace KingdomCapitals.Patches
             }
         }
     }
-
-    /// <summary>
-    /// Patch for building effect amounts to provide doubled bonuses for capitals.
-    /// Patches the Building.GetBuildingEffectAmount method.
-    /// </summary>
-    [HarmonyPatch(typeof(Building), "GetBuildingEffectAmount")]
-    public static class Building_GetBuildingEffectAmount_Patch
-    {
-        private static bool Prepare()
-        {
-            bool enabled = ModSettings.Instance?.AllowCapitalBuildingExtensions ?? true;
-            ModLogger.Log($"Building_GetBuildingEffectAmount_Patch: {(enabled ? "ENABLED" : "DISABLED")}");
-            return enabled;
-        }
-
-        /// <summary>
-        /// Postfix patch - doubles the building effect amount for capitals.
-        /// </summary>
-        private static void Postfix(Building __instance, ref float __result, BuildingEffectEnum effect)
-        {
-            try
-            {
-                // Check if this building belongs to a capital
-                Settlement settlement = __instance.Town?.Settlement;
-                if (settlement == null || !CapitalManager.IsCapital(settlement))
-                {
-                    return;
-                }
-
-                // Double the effect for capitals
-                __result *= 2f;
-
-                if (ModSettings.Instance?.EnableDebugLogging == true)
-                {
-                    ModLogger.Log($"Capital {settlement.Name}: Doubled {effect} bonus from {__instance.BuildingType?.Name} (original: {__result / 2f}, doubled: {__result})");
-                }
-            }
-            catch (Exception ex)
-            {
-                ModLogger.Error("Error in Building_GetBuildingEffectAmount_Patch", ex);
-            }
-        }
-    }
 }
