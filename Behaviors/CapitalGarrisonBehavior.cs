@@ -50,7 +50,16 @@ namespace KingdomCapitals.Behaviors
                     return;
                 }
 
-                // Check if settlement has food available
+                // Check if food is increasing (like vanilla garrison mechanic)
+                // Garrison only grows when food production is positive
+                float foodChange = settlement.Town.FoodChange;
+                if (foodChange <= 0f)
+                {
+                    // Food is decreasing or stable - don't add troops
+                    return;
+                }
+
+                // Also check if settlement has sufficient food stocks
                 if (settlement.Town.FoodStocks <= 0)
                 {
                     ModLogger.Log(string.Format(Messages.Log.CapitalNoFood, settlement.Name));
