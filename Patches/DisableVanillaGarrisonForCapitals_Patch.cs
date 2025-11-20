@@ -4,6 +4,7 @@ using KingdomCapitals.Utils;
 using System;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.Core;
 
 namespace KingdomCapitals.Patches
 {
@@ -11,7 +12,7 @@ namespace KingdomCapitals.Patches
     /// Disables vanilla automatic garrison recruitment (+1 troop per day) for capitals.
     /// Allows our custom CapitalGarrisonBehavior to be the ONLY source of garrison growth.
     /// </summary>
-    [HarmonyPatch(typeof(DefaultSettlementGarrisonModel), "TickAutoRecruitmentGarrisonChange")]
+    [HarmonyPatch(typeof(DefaultSettlementGarrisonModel), "CalculateGarrisonChangeAutoRecruitment")]
     public static class DisableVanillaGarrisonForCapitals_Patch
     {
         private static bool Prepare()
@@ -24,20 +25,20 @@ namespace KingdomCapitals.Patches
         /// Prefix patch - prevents vanilla garrison recruitment for capitals.
         /// Returns false to skip vanilla method execution for capitals.
         /// </summary>
-        /// <param name="settlement">The settlement being processed.</param>
-        /// <param name="__result">The number of troops to add (will be set to 0 for capitals).</param>
+        /// <param name="town">The town being processed.</param>
+        /// <param name="__result">The garrison change amount (will be set to 0 for capitals).</param>
         /// <returns>False if capital (skip vanilla), true otherwise (execute vanilla).</returns>
-        private static bool Prefix(Settlement settlement, ref int __result)
+        private static bool Prefix(Town town, ref int __result)
         {
             try
             {
-                // Check if this settlement is a capital
-                if (settlement == null || !settlement.IsTown)
+                // Check if this town is a capital
+                if (town == null || town.Settlement == null)
                 {
-                    return true; // Not a town, execute vanilla
+                    return true; // Execute vanilla
                 }
 
-                if (!CapitalManager.IsCapital(settlement))
+                if (!CapitalManager.IsCapital(town.Settlement))
                 {
                     return true; // Not a capital, execute vanilla (+1 troop)
                 }
