@@ -2,7 +2,6 @@ using HarmonyLib;
 using KingdomCapitals.Core;
 using KingdomCapitals.Utils;
 using System;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Settlements.Buildings;
 
