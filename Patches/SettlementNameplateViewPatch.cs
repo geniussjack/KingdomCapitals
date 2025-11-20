@@ -100,9 +100,31 @@ namespace KingdomCapitals.Patches
                     return;
                 }
 
-                // Find the widget for this nameplate
-                // This is tricky - we need to find the widget bound to this ViewModel
-                var rootWidget = layer.RootWidget;
+                // Get the movie's root widget via reflection
+                // GauntletLayer doesn't have direct RootWidget property
+                var movieField = AccessTools.Field(typeof(GauntletLayer), "_movie");
+                if (movieField == null)
+                {
+                    ModLogger.Log($"InjectCrownIcon: Cannot find _movie field");
+                    return;
+                }
+
+                var movie = movieField.GetValue(layer);
+                if (movie == null)
+                {
+                    ModLogger.Log($"InjectCrownIcon: Movie is null");
+                    return;
+                }
+
+                // Get RootView from movie via reflection
+                var rootViewProperty = AccessTools.Property(movie.GetType(), "RootView");
+                if (rootViewProperty == null)
+                {
+                    ModLogger.Log($"InjectCrownIcon: Cannot find RootView property");
+                    return;
+                }
+
+                var rootWidget = rootViewProperty.GetValue(movie, null) as Widget;
                 if (rootWidget == null)
                 {
                     ModLogger.Log($"InjectCrownIcon: Root widget is null for {nameplate.Settlement.Name}");
