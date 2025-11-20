@@ -30,9 +30,9 @@ namespace KingdomCapitals.Patches
         /// </summary>
         static bool Prepare()
         {
-            // Enable crown icon patch
-            ModLogger.Log("SettlementNameColorPatch ENABLED: Will add crown icon to capital names");
-            return true;
+            // DISABLED: Now using ViewModel approach instead
+            ModLogger.Log("SettlementNameColorPatch DISABLED: Using ViewModel approach for crown icon display");
+            return false;
         }
 
         /// <summary>
