@@ -52,11 +52,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <!-- Harmony -->
-    <Reference Include="0Harmony, Version=2.3.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(ModulesFolder)\Bannerlord.Harmony\bin\Win64_Shipping_Client\0Harmony.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <!-- Bannerlord Core -->
     <Reference Include="TaleWorlds.Core">
       <HintPath>$(GameFolder)\bin\Win64_Shipping_Client\TaleWorlds.Core.dll</HintPath>
@@ -143,18 +138,18 @@
     <Compile Include="Behaviors\CapitalConquestBehavior.cs" />
     <!-- Models -->
     <Compile Include="Models\ModSettings.cs" />
-    <!-- Utils -->
+    <Compile Include="Models\GameModels\CapitalGarrisonModel.cs" />
+    <Compile Include="Models\GameModels\CapitalPartyWageModel.cs" />
+    <Compile Include="Models\GameModels\CapitalFoodModel.cs" />
+    <Compile Include="Models\GameModels\CapitalProsperityModel.cs" />
+    <Compile Include="Models\GameModels\CapitalLoyaltyModel.cs" />
+    <Compile Include="Models\GameModels\CapitalMilitiaModel.cs" />
+    <!-- Services and Utils -->
     <Compile Include="Services\ConquestNotificationService.cs" />
     <Compile Include="Services\KingdomService.cs" />
     <Compile Include="Services\SettlementTransferService.cs" />
     <Compile Include="Utils\CapitalData.cs" />
     <Compile Include="Utils\ModLogger.cs" />
-    <!-- Patches -->
-    <Compile Include="Patches\CapitalOwnershipPatch.cs" />
-    <Compile Include="Patches\CapitalGarrisonWagePatch.cs" />
-    <Compile Include="Patches\DisableVanillaGarrisonForCapitals_Patch.cs" />
-    <Compile Include="Patches\CapitalDailyProjectsPatch.cs" />
-    <Compile Include="Patches\CapitalBuildingPatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
@@ -193,7 +188,6 @@
       <FilesToDelete Include="$(OutputPath)*.deps.json" />
       <FilesToDelete Include="$(OutputPath)*.runtimeconfig.json" />
       <FilesToDelete Include="$(OutputPath)MCMv5.dll" />
-      <FilesToDelete Include="$(OutputPath)0Harmony.dll" />
       <FilesToDelete Include="$(OutputPath)TaleWorlds.*.dll" />
       <FilesToDelete Include="$(OutputPath)SandBox*.dll" />
     </ItemGroup>

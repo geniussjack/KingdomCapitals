@@ -1,10 +1,8 @@
-using HarmonyLib;
 using KingdomCapitals.Behaviors;
 using KingdomCapitals.Constants;
+using KingdomCapitals.Models.GameModels;
 using KingdomCapitals.Utils;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -13,15 +11,14 @@ namespace KingdomCapitals.Core
 {
     /// <summary>
     /// Main entry point for the Kingdom Capitals mod.
-    /// Handles mod initialization, Harmony patching, and campaign behavior registration.
+    /// Handles mod initialization using native GameModel overrides and campaign behaviors.
+    /// No Harmony patches required - uses TaleWorlds' official modding API.
     /// </summary>
     public class SubModule : MBSubModuleBase
     {
-        private Harmony _harmony;
-
         /// <summary>
         /// Called when the mod is first loaded.
-        /// Initializes Harmony patches for all mod functionality.
+        /// Initializes logging system.
         /// </summary>
         protected override void OnSubModuleLoad()
         {
@@ -32,44 +29,21 @@ namespace KingdomCapitals.Core
                 // Clear log file at start of new session
                 ModLogger.ClearLog();
 
-                // Initialize Harmony patches
-                _harmony = new Harmony(ModConstants.HarmonyId);
-
-                ModLogger.Log("Starting Harmony patch process...");
-
-                // Apply all patches
-                _harmony.PatchAll();
-
-                // Log all patched methods
-                IEnumerable<MethodBase> patchedMethods = _harmony.GetPatchedMethods();
-                int patchCount = 0;
-                foreach (MethodBase method in patchedMethods)
-                {
-                    patchCount++;
-                    ModLogger.Log($"Patched method: {method.DeclaringType?.FullName}.{method.Name}");
-                }
-
-                ModLogger.Log($"Total methods patched: {patchCount}");
+                ModLogger.Log("Kingdom Capitals mod loaded - using native GameModel API (no Harmony patches)");
                 ModLogger.Log(Messages.Mod.LoadedSuccessfully);
-                ModLogger.Log(string.Format(Messages.Log.HarmonyPatchesAppliedFormat, ModConstants.HarmonyId));
             }
             catch (Exception ex)
             {
                 ModLogger.Error(Messages.Errors.FailedToLoad, ex);
-                // Log inner exception details if available
-                if (ex.InnerException != null)
-                {
-                    ModLogger.Error("Inner exception:", ex.InnerException);
-                }
             }
         }
 
         /// <summary>
         /// Called when a new game starts or a save is loaded.
-        /// Initializes the capital management system and registers campaign behaviors.
+        /// Initializes the capital management system, registers custom GameModels, and campaign behaviors.
         /// </summary>
         /// <param name="game">The game instance.</param>
-        /// <param name="gameStarterObject">The game starter object for registering behaviors.</param>
+        /// <param name="gameStarterObject">The game starter object for registering behaviors and models.</param>
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
             base.OnGameStart(game, gameStarterObject);
@@ -79,6 +53,16 @@ namespace KingdomCapitals.Core
                 if (game.GameType is Campaign)
                 {
                     CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarterObject;
+
+                    // Register custom GameModels (replaces Harmony patches)
+                    ModLogger.Log("Registering custom GameModels...");
+                    campaignStarter.AddModel(new CapitalGarrisonModel());
+                    campaignStarter.AddModel(new CapitalPartyWageModel());
+                    campaignStarter.AddModel(new CapitalFoodModel());
+                    campaignStarter.AddModel(new CapitalProsperityModel());
+                    campaignStarter.AddModel(new CapitalLoyaltyModel());
+                    campaignStarter.AddModel(new CapitalMilitiaModel());
+                    ModLogger.Log("6 custom GameModels registered successfully");
 
                     // Initialize capital management system
                     CapitalManager.Initialize();
@@ -119,7 +103,7 @@ namespace KingdomCapitals.Core
 
         /// <summary>
         /// Called when the mod is unloaded.
-        /// Removes all Harmony patches applied by this mod.
+        /// No cleanup needed - GameModels are automatically unloaded with the campaign.
         /// </summary>
         protected override void OnSubModuleUnloaded()
         {
@@ -127,8 +111,6 @@ namespace KingdomCapitals.Core
 
             try
             {
-                // Unpatch Harmony modifications
-                _harmony?.UnpatchAll(ModConstants.HarmonyId);
                 ModLogger.Log(Messages.Mod.Unloaded);
             }
             catch (Exception ex)

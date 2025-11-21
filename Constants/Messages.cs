@@ -63,7 +63,6 @@ namespace KingdomCapitals.Constants
         /// </summary>
         public static class Log
         {
-            public const string HarmonyPatchesAppliedFormat = "Harmony patches applied: {0}";
             public const string CapitalManagerInitializedFormat = "CapitalManager initialized with {0} capitals";
             public const string MarkedAsRecentlyCapturedFormat = "Marked {0} as recently captured capital";
             public const string TransferredCapitalFormat = "Transferred capital {0} to {1}";

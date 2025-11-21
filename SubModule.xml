@@ -12,7 +12,6 @@
     <DependedModule Id="SandBoxCore"/>
     <DependedModule Id="Sandbox"/>
     <DependedModule Id="StoryMode" Optional="true"/>
-    <DependedModule Id="Bannerlord.Harmony"/>
     <DependedModule Id="Bannerlord.MBOptionScreen" Optional="true"/>
   </DependedModules>
 
