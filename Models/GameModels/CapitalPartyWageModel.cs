@@ -11,31 +11,10 @@ namespace KingdomCapitals.Models.GameModels
     /// </summary>
     public class CapitalPartyWageModel : DefaultPartyWageModel
     {
-        public override int GetTotalWage(MobileParty mobileParty, bool includeDescriptions = false)
+        public override ExplainedNumber GetTotalWage(MobileParty mobileParty, bool includeDescriptions = false)
         {
             // Get base wage calculation
-            int baseWage = base.GetTotalWage(mobileParty, includeDescriptions);
-
-            // Only modify garrison parties
-            if (mobileParty == null || !mobileParty.IsGarrison)
-            {
-                return baseWage;
-            }
-
-            // Check if this garrison belongs to a capital
-            if (mobileParty.CurrentSettlement != null &&
-                CapitalManager.IsCapital(mobileParty.CurrentSettlement))
-            {
-                return 0; // Free garrison for capitals
-            }
-
-            return baseWage;
-        }
-
-        public override ExplainedNumber GetTotalWage(MobileParty mobileParty, bool includeDescriptions = false, int dayOfYear = -1)
-        {
-            // Get base wage calculation
-            ExplainedNumber result = base.GetTotalWage(mobileParty, includeDescriptions, dayOfYear);
+            ExplainedNumber result = base.GetTotalWage(mobileParty, includeDescriptions);
 
             // Only modify garrison parties
             if (mobileParty == null || !mobileParty.IsGarrison)
