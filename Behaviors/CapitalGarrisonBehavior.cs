@@ -66,6 +66,13 @@ namespace KingdomCapitals.Behaviors
                     return;
                 }
 
+                // Check if garrison has space for more troops
+                if (!HasGarrisonSpace(settlement))
+                {
+                    ModLogger.Log($"Capital {settlement.Name.ToString()} garrison is at maximum capacity, skipping reinforcement");
+                    return;
+                }
+
                 // Add troops to garrison
                 AddDailyGarrisonReinforcement(settlement);
 
@@ -169,6 +176,46 @@ namespace KingdomCapitals.Behaviors
             {
                 ModLogger.Error($"Error getting troop for culture {culture?.Name} tier {targetTier}", ex);
                 return culture?.BasicTroop; // Fallback to basic troop
+            }
+        }
+
+        /// <summary>
+        /// Checks if garrison has space for more troops.
+        /// </summary>
+        /// <param name="settlement">The settlement to check.</param>
+        /// <returns>True if garrison can accept more troops, false otherwise.</returns>
+        private bool HasGarrisonSpace(Settlement settlement)
+        {
+            try
+            {
+                if (settlement.Town?.GarrisonParty == null)
+                {
+                    return false;
+                }
+
+                // Get current garrison size
+                int currentSize = settlement.Town.GarrisonParty.Party.NumberOfAllMembers;
+
+                // Get garrison party size limit (includes base capacity + building bonuses)
+                int partySizeLimit = settlement.Town.GarrisonParty.Party.PartySizeLimit;
+
+                // Check if there's space for at least Settings.DailyGarrisonReinforcement troops
+                int reinforcementCount = Settings?.DailyGarrisonReinforcement ?? 3;
+
+                // Return true if we have space for the reinforcement
+                bool hasSpace = currentSize + reinforcementCount <= partySizeLimit;
+
+                if (!hasSpace)
+                {
+                    ModLogger.Log($"{settlement.Name.ToString()} garrison full: {currentSize}/{partySizeLimit} (need {reinforcementCount} more)");
+                }
+
+                return hasSpace;
+            }
+            catch (Exception ex)
+            {
+                ModLogger.Error($"Error checking garrison space for {settlement?.Name}", ex);
+                return true; // Default to allowing reinforcement if check fails
             }
         }
 

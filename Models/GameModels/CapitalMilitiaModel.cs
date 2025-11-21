@@ -33,9 +33,9 @@ namespace KingdomCapitals.Models.GameModels
                 town.CurrentDefaultBuilding != null &&
                 town.CurrentDefaultBuilding.BuildingType.StringId.Contains("daily_militia"))
             {
-                // Double the daily militia bonus
-                float originalValue = result.ResultNumber;
-                result.Add(originalValue, new TextObject("Capital Bonus (x2 Daily Project)"));
+                // Double the daily militia bonus (+1 base becomes +2)
+                // Daily project gives +1, we add another +1 to make it +2
+                result.Add(1f, new TextObject("{=capital_daily_bonus}Capital Daily Project Bonus"));
             }
 
             return result;

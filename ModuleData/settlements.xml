@@ -15,7 +15,7 @@
     - Vlandia: Galend (town_v1)
     - Aserai: Quyaz (town_a8)
     - Sturgia: Balgard (town_s2)
-    - Khuzait: Makeb (town_k4)
+    - Khuzait: Makeb (town_k3)
     - Western Empire: Jalmarys (town_es3)
     - Northern Empire: Diathma (town_en2)
     - Southern Empire: Lycaron (town_es2)
@@ -698,9 +698,9 @@
   </Settlement>
 
   <!-- ========================================
-       KHUZAIT CAPITAL: Makeb (town_k4)
+       KHUZAIT CAPITAL: Makeb (town_k3)
        ======================================== -->
-  <Settlement id="town_k4">
+  <Settlement id="town_k3">
     <Buildings>
 
       <Building id="building_settlement_granary">
