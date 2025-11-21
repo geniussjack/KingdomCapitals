@@ -42,11 +42,11 @@ namespace KingdomCapitals.Core
                 if (capital != null)
                 {
                     _activeCapitals[kingdom.StringId] = capital;
-                    ModLogger.Log($"Registered capital: {capital.Name} for kingdom {kingdom.Name}");
+                    ModLogger.Log($"Registered capital: {capital.Name.ToString()} for kingdom {kingdom.Name.ToString()}");
                 }
                 else
                 {
-                    ModLogger.Log($"No capital found for kingdom: {kingdom.Name} (StringId: '{kingdom.StringId}')");
+                    ModLogger.Log($"No capital found for kingdom: {kingdom.Name.ToString()} (StringId: '{kingdom.StringId}')");
                 }
             }
 

@@ -56,13 +56,22 @@ namespace KingdomCapitals.Core
 
                     // Register custom GameModels (replaces Harmony patches)
                     ModLogger.Log("Registering custom GameModels...");
+
+                    // Core models
                     campaignStarter.AddModel(new CapitalGarrisonModel());
                     campaignStarter.AddModel(new CapitalPartyWageModel());
+
+                    // Building models (levels 4-5 and doubled effects)
+                    campaignStarter.AddModel(new CapitalBuildingConstructionModel());
+                    campaignStarter.AddModel(new CapitalBuildingEffectModel());
+
+                    // Daily project models (doubled bonuses)
                     campaignStarter.AddModel(new CapitalFoodModel());
                     campaignStarter.AddModel(new CapitalProsperityModel());
                     campaignStarter.AddModel(new CapitalLoyaltyModel());
                     campaignStarter.AddModel(new CapitalMilitiaModel());
-                    ModLogger.Log("6 custom GameModels registered successfully");
+
+                    ModLogger.Log("8 custom GameModels registered successfully");
 
                     // Initialize capital management system
                     CapitalManager.Initialize();
