@@ -140,7 +140,6 @@
     <Compile Include="Models\ModSettings.cs" />
     <Compile Include="Models\GameModels\CapitalGarrisonModel.cs" />
     <Compile Include="Models\GameModels\CapitalPartyWageModel.cs" />
-    <Compile Include="Models\GameModels\CapitalBuildingConstructionModel.cs" />
     <Compile Include="Models\GameModels\CapitalBuildingEffectModel.cs" />
     <Compile Include="Models\GameModels\CapitalFoodModel.cs" />
     <Compile Include="Models\GameModels\CapitalProsperityModel.cs" />

@@ -61,8 +61,7 @@ namespace KingdomCapitals.Core
                     campaignStarter.AddModel(new CapitalGarrisonModel());
                     campaignStarter.AddModel(new CapitalPartyWageModel());
 
-                    // Building models (levels 4-5 and doubled effects)
-                    campaignStarter.AddModel(new CapitalBuildingConstructionModel());
+                    // Building models (doubled effects for daily projects)
                     campaignStarter.AddModel(new CapitalBuildingEffectModel());
 
                     // Daily project models (doubled bonuses)
@@ -71,7 +70,7 @@ namespace KingdomCapitals.Core
                     campaignStarter.AddModel(new CapitalLoyaltyModel());
                     campaignStarter.AddModel(new CapitalMilitiaModel());
 
-                    ModLogger.Log("8 custom GameModels registered successfully");
+                    ModLogger.Log("7 custom GameModels registered successfully");
 
                     // Initialize capital management system
                     CapitalManager.Initialize();
