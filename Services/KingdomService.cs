@@ -14,37 +14,47 @@ namespace KingdomCapitals.Services
     public static class KingdomService
     {
         /// <summary>
-        /// Vassalizes all clans from a defeated kingdom to the conquerer.
-        /// Includes the ruling clan - all clans become vassals of the conquering kingdom.
+        /// Vassalizes independent clans (after their kingdom was destroyed) to the conquering kingdom.
+        /// This must be called AFTER DestroyKingdom to work properly.
         /// </summary>
-        /// <param name="defeatedKingdom">The kingdom that was defeated.</param>
-        /// <param name="conquererKingdom">The kingdom that conquered.</param>
+        /// <param name="clans">List of clans to vassalize (should be independent after kingdom destruction).</param>
+        /// <param name="conquererKingdom">The kingdom that will accept these clans as vassals.</param>
         /// <returns>The number of clans successfully vassalized.</returns>
-        public static int VassalizeDefeatedClans(Kingdom defeatedKingdom, Kingdom conquererKingdom)
+        public static int VassalizeIndependentClans(List<Clan> clans, Kingdom conquererKingdom)
         {
             try
             {
-                int vassalizedCount = 0;
-                List<Clan> clansToVassalize = defeatedKingdom.Clans.ToList();
-
-                foreach (Clan clan in clansToVassalize)
+                if (clans == null || conquererKingdom == null)
                 {
-                    // Vassalize ALL clans, including the ruling clan
-                    if (clan != null && !clan.IsEliminated)
+                    ModLogger.Error("VassalizeIndependentClans: null parameters provided");
+                    return 0;
+                }
+
+                int vassalizedCount = 0;
+
+                foreach (Clan clan in clans)
+                {
+                    // Only vassalize clans that became independent after kingdom destruction
+                    if (clan != null && !clan.IsEliminated && clan.Kingdom == null)
                     {
-                        // Make clan join conquerer kingdom as vassal
+                        // Make independent clan join conquerer kingdom as vassal
                         ChangeKingdomAction.ApplyByJoinToKingdom(clan, conquererKingdom, false);
                         ModLogger.Log(string.Format(Messages.Log.VassalizedClanFormat, clan.Name.ToString(), conquererKingdom.Name.ToString()));
                         vassalizedCount++;
                     }
+                    else if (clan != null && clan.Kingdom != null)
+                    {
+                        // Clan is still in a kingdom (shouldn't happen if DestroyKingdom was called)
+                        ModLogger.Warning($"Clan {clan.Name.ToString()} is still in kingdom {clan.Kingdom.Name.ToString()}, cannot vassalize");
+                    }
                 }
 
-                ModLogger.Log($"Total clans vassalized: {vassalizedCount} from {defeatedKingdom.Name.ToString()} to {conquererKingdom.Name.ToString()}");
+                ModLogger.Log($"Total clans vassalized: {vassalizedCount} to {conquererKingdom.Name.ToString()}");
                 return vassalizedCount;
             }
             catch (Exception ex)
             {
-                ModLogger.Error($"Error vassalizing clans from {defeatedKingdom?.Name?.ToString() ?? "Unknown"}", ex);
+                ModLogger.Error($"Error vassalizing independent clans to {conquererKingdom?.Name?.ToString() ?? "Unknown"}", ex);
                 return 0;
             }
         }

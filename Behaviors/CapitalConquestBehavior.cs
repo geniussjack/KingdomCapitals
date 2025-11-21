@@ -4,6 +4,7 @@ using KingdomCapitals.Models;
 using KingdomCapitals.Services;
 using KingdomCapitals.Utils;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -145,21 +146,27 @@ namespace KingdomCapitals.Behaviors
                     _ = SettlementTransferService.TransferCapitalToRulingClan(capital, conquererKingdom);
                 }
 
-                // 3. Vassalize all clans of defeated kingdom BEFORE destroying the kingdom
-                // This must happen BEFORE DestroyKingdom, otherwise clans become clanless
-                if (Settings?.VassalizeDefeatedClans != false)
-                {
-                    _ = KingdomService.VassalizeDefeatedClans(defeatedKingdom, conquererKingdom);
-                }
+                // 3. Save list of defeated kingdom's clans BEFORE destroying the kingdom
+                // We need this list because after DestroyKingdom, clans will become independent
+                List<Clan> defeatedClans = defeatedKingdom.Clans.ToList();
+                ModLogger.Log($"Saved {defeatedClans.Count} clans from {defeatedKingdom.Name.ToString()} for vassalization");
 
                 // 4. Remove capital status from conquered settlement
                 CapitalManager.UnregisterCapital(capital, defeatedKingdom);
 
                 // 5. Destroy the defeated kingdom
+                // NOTE: After this, clans become independent (Kingdom = null)
                 // NOTE: Other settlements will be distributed via vanilla voting system
                 _ = KingdomService.DestroyKingdom(defeatedKingdom);
 
-                // 6. Notify player (if enabled)
+                // 6. Vassalize independent clans AFTER kingdom destruction (if enabled)
+                // This is the Allegiance Overhaul approach - clans become independent, then join as vassals
+                if (Settings?.VassalizeDefeatedClans != false)
+                {
+                    _ = KingdomService.VassalizeIndependentClans(defeatedClans, conquererKingdom);
+                }
+
+                // 7. Notify player (if enabled)
                 if (Settings?.EnableConquestNotifications != false)
                 {
                     ConquestNotificationService.NotifyKingdomConquest(capital, defeatedKingdom, conquererKingdom, capturerHero);
