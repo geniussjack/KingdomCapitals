@@ -15,6 +15,7 @@ namespace KingdomCapitals.Services
     {
         /// <summary>
         /// Vassalizes all clans from a defeated kingdom to the conquerer.
+        /// Includes the ruling clan - all clans become vassals of the conquering kingdom.
         /// </summary>
         /// <param name="defeatedKingdom">The kingdom that was defeated.</param>
         /// <param name="conquererKingdom">The kingdom that conquered.</param>
@@ -28,7 +29,8 @@ namespace KingdomCapitals.Services
 
                 foreach (Clan clan in clansToVassalize)
                 {
-                    if (clan != null && !clan.IsEliminated && clan != defeatedKingdom.RulingClan)
+                    // Vassalize ALL clans, including the ruling clan
+                    if (clan != null && !clan.IsEliminated)
                     {
                         // Make clan join conquerer kingdom as vassal
                         ChangeKingdomAction.ApplyByJoinToKingdom(clan, conquererKingdom, false);
@@ -37,6 +39,7 @@ namespace KingdomCapitals.Services
                     }
                 }
 
+                ModLogger.Log($"Total clans vassalized: {vassalizedCount} from {defeatedKingdom.Name.ToString()} to {conquererKingdom.Name.ToString()}");
                 return vassalizedCount;
             }
             catch (Exception ex)
