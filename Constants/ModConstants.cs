@@ -6,11 +6,6 @@ namespace KingdomCapitals.Constants
     public static class ModConstants
     {
         /// <summary>
-        /// Harmony patch identifier for the mod.
-        /// </summary>
-        public const string HarmonyId = "com.kingdomcapitals.bannerlord";
-
-        /// <summary>
         /// Mod name for display purposes.
         /// </summary>
         public const string ModName = "Kingdom Capitals";
