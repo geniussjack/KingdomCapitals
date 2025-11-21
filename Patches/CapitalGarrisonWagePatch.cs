@@ -74,14 +74,18 @@ namespace KingdomCapitals.Patches
     /// <summary>
     /// Alternative patch for garrison wage calculation via PartyWageModel.
     /// This patches the model method that calculates total party wages.
+    ///
+    /// DISABLED: This patch causes TypeInitializationException in DefaultPartyWageModel's static constructor.
+    /// The static constructor calls GameTexts.FindText() which fails during Harmony patching.
+    /// The primary MobileParty.TotalWage patch above is sufficient for our needs.
     /// </summary>
     [HarmonyPatch(typeof(DefaultPartyWageModel), "GetTotalWage")]
     public static class DefaultPartyWageModel_GetTotalWage_Patch
     {
         private static bool Prepare()
         {
-            ModLogger.Log("DefaultPartyWageModel_GetTotalWage_Patch: ENABLED - Backup patch for capital garrison wages");
-            return true;
+            ModLogger.Log("DefaultPartyWageModel_GetTotalWage_Patch: DISABLED - Causes static constructor crash");
+            return false; // Disable this patch to prevent TypeInitializationException
         }
 
         /// <summary>
